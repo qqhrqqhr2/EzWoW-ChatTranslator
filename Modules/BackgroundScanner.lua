@@ -145,6 +145,13 @@ local pendingBags, pendingSpells = false, false
 function ns.RestartBackgroundLexiconScan()
     queue = {}
     scannedItems = {}
+    -- option turned on mid-session: run the initial scan now instead of waiting for a loading screen
+    if C_Timer and LexiconBackgroundScanner.isFeatureEnabled() then
+        C_Timer.After(1, function()
+            if not LexiconBackgroundScanner.isFeatureEnabled() then return end
+            pcall(LexiconBackgroundScanner.inspectSpellbook); pcall(LexiconBackgroundScanner.inspectTalents); pcall(LexiconBackgroundScanner.inspectBags)
+        end)
+    end
 end
 local eventFrame = CreateFrame("Frame")
 eventFrame:SetScript("OnEvent", function(self, event)
