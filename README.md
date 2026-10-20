@@ -1,5 +1,10 @@
 # EzWoW - Chat Translator (`EzWoW-ChatTranslator`)
 
+## CurseForge
+
+- **Project ID / 프로젝트 ID:** `1733319`
+- **Project page / 프로젝트 페이지:** [EzWoW-ChatTranslator](https://www.curseforge.com/wow/addons/wowchattranslator)
+
 **[한국어](#한국어) · [English](#english)**
 
 WoW Forever (`Interface: 16001`) · `v1.5.0` · `/ezct`
