@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="0.42" cy="0.38" r="0.75">
+      <stop offset="0" stop-color="#2f6286"/><stop offset="0.6" stop-color="#173349"/><stop offset="1" stop-color="#0a1520"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbe7a1"/><stop offset="0.35" stop-color="#d9a945"/>
+      <stop offset="0.65" stop-color="#8f6420"/><stop offset="1" stop-color="#e8c264"/>
+    </linearGradient>
+    <linearGradient id="parch" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8ecc6"/><stop offset="1" stop-color="#d8bb76"/></linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2faff"/><stop offset="1" stop-color="#a9d3f2"/></linearGradient>
+    <radialGradient id="globe" cx="0.38" cy="0.32" r="0.8"><stop offset="0" stop-color="#7fd0ff"/><stop offset="0.7" stop-color="#2a7fb8"/><stop offset="1" stop-color="#144a72"/></radialGradient>
+  </defs>
+  <rect x="14" y="14" width="484" height="484" rx="64" fill="url(#bg)"/>
+  <rect x="14" y="14" width="484" height="484" rx="64" fill="none" stop-color="#000" stroke="url(#gold)" stroke-width="22"/>
+  <rect x="32" y="32" width="448" height="448" rx="50" fill="none" stroke="#06101a" stroke-opacity="0.7" stroke-width="5"/>
+
+  <path transform="translate(9,11)" fill="#000" fill-opacity="0.4" d="M 116,90 H 396 A50,50 0 0 1 446,140 V 342 A50,50 0 0 1 396,392 H 214 L 120,456 L 150,392 H 116 A50,50 0 0 1 66,342 V 140 A50,50 0 0 1 116,90 Z"/>
+  <path fill="url(#parch)" stroke="#4a3112" stroke-width="9" stroke-linejoin="round" d="M 116,90 H 396 A50,50 0 0 1 446,140 V 342 A50,50 0 0 1 396,392 H 214 L 120,456 L 150,392 H 116 A50,50 0 0 1 66,342 V 140 A50,50 0 0 1 116,90 Z"/>
+  <path d="M 100,118 Q 118,104 170,104" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="9" stroke-linecap="round"/>
+  <line x1="256" y1="118" x2="256" y2="366" stroke="#a88a4e" stroke-width="5"/>
+  <line x1="92" y1="241" x2="420" y2="241" stroke="#a88a4e" stroke-width="5"/>
+  <text x="174" y="223" text-anchor="middle" font-family="Noto Sans CJK KR" font-weight="bold" font-size="112" fill="#0f2c44">A</text>
+  <text x="338" y="223" text-anchor="middle" font-family="Noto Sans CJK SC" font-weight="bold" font-size="106" fill="#7a2416">中</text>
+  <text x="174" y="350" text-anchor="middle" font-family="Noto Sans CJK KR" font-weight="bold" font-size="106" fill="#7a2416">Я</text>
+  <text x="338" y="350" text-anchor="middle" font-family="Noto Sans CJK KR" font-weight="bold" font-size="106" fill="#0f2c44">가</text>
+</svg>

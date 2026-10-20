@@ -1,0 +1,57 @@
+## Interface: 16001
+## Title: EzWoW - Chat Translator
+## Title-enUS: EzWoW - Chat Translator
+## Title-koKR: EzWoW - Chat Translator
+## Title-deDE: EzWoW - Chat Translator
+## Title-frFR: EzWoW - Chat Translator
+## Title-esES: EzWoW - Chat Translator
+## Title-esMX: EzWoW - Chat Translator
+## Title-ruRU: EzWoW - Chat Translator
+## Title-zhCN: EzWoW - Chat Translator
+## Title-zhTW: EzWoW - Chat Translator
+## Title-jaJP: EzWoW - Chat Translator
+## Notes: Translates foreign chat into your local language (KO, EN, DE, FR, ES, RU, zhCN, zhTW, JA) with a built-in gamer slang and WoW term dictionary.
+## Notes-enUS: Translates foreign chat into your local language (KO, EN, DE, FR, ES, RU, zhCN, zhTW, JA) with a built-in gamer slang and WoW term dictionary.
+## Notes-koKR: 한국어·영어·중국어·일본어·러시아어·스페인어 채팅을 현지 언어로 풀어 줍니다. 게임 은어·약어·와우 용어 사전 내장.
+## Notes-deDE: Übersetzt fremdsprachigen Chat mithilfe eines integrierten WoW-Begriffs- und Slang-Wörterbuchs in Ihre Sprache.
+## Notes-frFR: Traduit le canal de discussion étranger dans votre langue grâce à un dictionnaire intégré d'argot et de termes WoW.
+## Notes-esES: Traduce el chat en otros idiomas a tu idioma local mediante un diccionario integrado de jerga y términos de WoW.
+## Notes-esMX: Traduce el chat en otros idiomas a tu idioma local mediante un diccionario integrado de jerga y términos de WoW.
+## Notes-ruRU: Переводит чат на корейском/китайском/японском/русском/английском/испанском на ваш язык с помощью встроенного словаря игрового сленга и терминов WoW.
+## Notes-zhCN: 将韩语/中文/日语/俄语/英语/西班牙语聊天翻译成本地语言（内置游戏俚语和魔兽术语词典）。
+## Notes-zhTW: 將韓語/中文/日語/俄語/英語/西班牙語聊天翻譯成本地語言（內建遊戲俚語和魔獸術語詞典）。
+## Notes-jaJP: 韓国語・英語・中国語・日本語・ロシア語・スペイン語のチャットを内蔵のゲーム用語辞書で翻訳します。
+## Author: qqhrqqhr2
+## Version: 1.5.0
+## Category: Chat & Communication
+## IconTexture: Interface\AddOns\EzWoW-ChatTranslator\Media\icon
+## X-License: MIT
+## X-Website: https://github.com/qqhrqqhr2/EzWoW-ChatTranslator
+## X-Curse-Project-ID: 1733319
+## SavedVariables: EzWoW_ChatTranslatorDB
+
+Core\LocaleCore.lua
+Core\UIKit.lua
+Core\LocaleExtra.lua
+Core\LocaleUI.lua
+Data\TradMap.lua
+Data\Glossary.lua
+Data\GlossaryEN.lua
+Data\GlossaryES.lua
+Data\GlossaryJA.lua
+Data\GlossaryKO.lua
+Data\GlossaryRU.lua
+Data\GlossaryZH.lua
+Data\Translations.lua
+Data\TooltipText.lua
+Data\TooltipDB.lua
+Core\Init.lua
+Modules\UnknownChat.lua
+Modules\PlayerTooltip.lua
+Modules\TranslatorEngine.lua
+Modules\ChatFilter.lua
+Modules\TooltipTranslator.lua
+Modules\BackgroundScanner.lua
+Modules\OutgoingAndDict.lua
+UI\OptionsWindow.lua
+UI\MinimapButton.lua

@@ -1,0 +1,3 @@
+-- Shared dictionary namespace. Entries are maintained in one file per source language.
+local ADDON, ns = ...
+ns.RawGlossary = {}
