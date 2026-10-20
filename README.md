@@ -182,3 +182,13 @@ Chat Translator appends a **language tag and a rough meaning** to foreign-langua
 - Chat already in your local language is left untouched.
 - Setting changes apply **to new messages**.
 - German and French work as result languages, but their tables are small (965 entries each); missing parts fall back to English.
+
+---
+
+## Support / 후원
+
+If you find this addon useful, you can support its development.
+
+애드온이 도움이 되셨다면 개발 후원으로 응원해 주세요.
+
+[Buy Me a Coffee ☕](https://buymeacoffee.com/qqhrqqhr2)
