@@ -23,7 +23,7 @@
 ## Notes-jaJP: 韓国語・英語・中国語・日本語・ロシア語・スペイン語のチャットを内蔵のゲーム用語辞書で翻訳します。
 ## Author: qqhrqqhr2
 ## Version: 2.0.0
-## Category: Chat & Communication
+## Category: EzWoW
 ## IconTexture: Interface\AddOns\EzWoW-ChatTranslator\Media\icon
 ## X-License: MIT
 ## X-Website: https://github.com/qqhrqqhr2/EzWoW-ChatTranslator
