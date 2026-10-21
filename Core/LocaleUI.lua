@@ -330,3 +330,12 @@ for langCode, strings in pairs(resolveOptionsLocaleText) do
     end
 end
 ns.SynchronizeTargetLanguage()
+
+-- Additional translations for interface messages.
+ns.STR.de["resetIconPos"] = "Symbol- und Fensterposition zurücksetzen"
+ns.STR.fr["resetIconPos"] = "Réinitialiser la position de l'icône et de la fenêtre"
+ns.STR.es["resetIconPos"] = "Restablecer posición del icono y la ventana"
+ns.STR.ru["resetIconPos"] = "Сбросить положение значка и окна"
+ns.STR.zhCN["resetIconPos"] = "重置图标和窗口位置"
+ns.STR.zhTW["resetIconPos"] = "重置圖示與視窗位置"
+ns.STR.ja.resetIconPos = "アイコンとウィンドウの位置をリセット"
