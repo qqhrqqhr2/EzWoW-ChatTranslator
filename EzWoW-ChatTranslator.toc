@@ -53,5 +53,6 @@ Modules\ChatFilter.lua
 Modules\TooltipTranslator.lua
 Modules\BackgroundScanner.lua
 Modules\OutgoingAndDict.lua
+UI\LanguageDropdown.lua
 UI\OptionsWindow.lua
 UI\MinimapButton.lua

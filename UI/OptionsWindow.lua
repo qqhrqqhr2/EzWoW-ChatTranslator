@@ -231,23 +231,28 @@ function SettingsDialog.constructMainFrame()
 
     local y = -72
     SettingsDialog.createSectionHeaderLabel(containerFrame, "secTarget", LEFT, y); y = y - 26
-    local function createOptionRadioButton(value, x, yy, w)
-        local resolveLabel
-        if value == "auto" then
-            resolveLabel = function() return L.auto:format(ns.TARGET_NAME[ns.CLIENT_TARGET]) end
-        else
-            resolveLabel = function() return ns.TARGET_NAME[value] end
-        end
-        SettingsDialog.check(containerFrame, resolveLabel, x, yy,
-            function() return (savedDB.target or "auto") == value end,
-            function() SettingsDialog.assignTarget(value) end, w, true)
+    -- translate-to language: click the box, then pick a language from the list
+    local function targetName(value)
+        if value == "auto" then return L.auto:format(ns.TARGET_NAME[ns.CLIENT_TARGET]) end
+        return ns.TARGET_NAME[value] or value
     end
-    createOptionRadioButton("auto", LEFT, y, LW); y = y - ROW
-    local order = { "ko", "en", "de", "fr", "es", "ru", "zhCN", "zhTW", "ja" }
-    for index, resolvedValue in ipairs(order) do
-        createOptionRadioButton(resolvedValue, LEFT + ((index - 1) % 2) * HALF, y - math.floor((index - 1) / 2) * ROW, HW)
+    local targetBox = SettingsDialog.createTranslatorButton(containerFrame, LW, 26, false, nil)
+    targetBox:SetPoint("TOPLEFT", LEFT, y)
+    local targetItems = {}
+    for index, value in ipairs({ "auto", "ko", "en", "de", "fr", "es", "ru", "zhCN", "zhTW", "ja" }) do
+        targetItems[index] = { value = value, text = function() return targetName(value) end }
     end
-    y = y - 5 * ROW - 4
+    ns.LanguageDropdown.Attach(targetBox, {
+        items = targetItems,
+        colors = { accent = { 0.478, 0.855, 0.831, 1 } },
+        get = function() return savedDB.target or "auto" end,
+        set = function(value) SettingsDialog.assignTarget(value) end,
+    })
+    SettingsDialog.registerRefreshCallback(targetBox.label, function()
+        ns.LanguageDropdown.Refresh(targetBox)
+        return targetName(savedDB.target or "auto") .. " ▼"
+    end, LW - 16, 1)
+    y = y - 34
     SettingsDialog.createMutedNoteLabel(containerFrame, "targetNote", LEFT + 4, y); y = y - 40
 
     SettingsDialog.createSectionHeaderLabel(containerFrame, "secChat", LEFT, y); y = y - 26
