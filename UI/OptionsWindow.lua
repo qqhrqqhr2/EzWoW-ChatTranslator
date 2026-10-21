@@ -22,9 +22,11 @@ local texts = {}
 local checks = {}     
 local langChecks = {}
 
-function SettingsDialog.registerRefreshCallback(obj, fn)
-    texts[#texts + 1] = { obj, fn }
+-- fitW/fitLines: optional space the text must fit in (long translations shrink).
+function SettingsDialog.registerRefreshCallback(obj, fn, fitW, fitLines)
+    texts[#texts + 1] = { obj, fn, fitW, fitLines }
     obj:SetText(fn())
+    if fitW then ns.UIKit:FitFontString(obj, fitW, fitLines or 1) end
     return obj
 end
 
@@ -48,7 +50,7 @@ function SettingsDialog.check(parent, resolveLabel, x, y, get, set, maxW, create
         labelRegion:SetWidth(maxW)
         if labelRegion.SetWordWrap then labelRegion:SetWordWrap(false) end
     end
-    SettingsDialog.registerRefreshCallback(labelRegion, resolveLabel)
+    SettingsDialog.registerRefreshCallback(labelRegion, resolveLabel, maxW, 1)
     checkWidget.label = labelRegion
     checkWidget.get = get
     checkWidget:SetScript("OnClick", function(self) set(self:GetChecked() and true or false) end)
@@ -131,7 +133,7 @@ end
 
 function SettingsDialog.createActionButton(parent, key, w, isAccent)
     local buttonWidget = SettingsDialog.createTranslatorButton(parent, w or 140, 26, isAccent)
-    SettingsDialog.registerRefreshCallback(buttonWidget.label, function() return L[key] end)
+    SettingsDialog.registerRefreshCallback(buttonWidget.label, function() return L[key] end, (w or 140) - 8, 1)
     return buttonWidget
 end
 
@@ -268,7 +270,7 @@ function SettingsDialog.constructMainFrame()
     cover:SetJustifyH("LEFT")
     cover:SetTextColor(0.929, 0.957, 0.969)
     if cover.SetWordWrap then cover:SetWordWrap(false) end
-    SettingsDialog.registerRefreshCallback(cover, function() return L.optCover:format(savedDB.chat.minCover or 40) end)
+    SettingsDialog.registerRefreshCallback(cover, function() return L.optCover:format(savedDB.chat.minCover or 40) end, COL_W - 100, 1)
     y = y - ROW - 4
 
     SettingsDialog.check(containerFrame, function() return L.optTag end, LEFT, y, function() return savedDB.chat.tag end, function(v) savedDB.chat.tag = v end, LW); y = y - ROW
@@ -366,7 +368,10 @@ syncAll = function()
         if BlizzardOptionsCanvas and BlizzardOptionsCanvas.RefreshTexts then BlizzardOptionsCanvas:RefreshTexts() end
         return
     end
-    for _, resolvedValue in ipairs(texts) do resolvedValue[1]:SetText(resolvedValue[2]()) end
+    for _, resolvedValue in ipairs(texts) do
+        resolvedValue[1]:SetText(resolvedValue[2]())
+        if resolvedValue[3] then ns.UIKit:FitFontString(resolvedValue[1], resolvedValue[3], resolvedValue[4] or 1) end
+    end
     for _, checkWidget in ipairs(checks) do checkWidget:SetChecked(checkWidget.get() and true or false) end
     SettingsDialog.layoutLangs()
     if BlizzardOptionsCanvas and BlizzardOptionsCanvas.RefreshTexts then
@@ -469,7 +474,10 @@ function SettingsDialog.registerPanel()
         ns.ToggleOptions()
     end)
     buttonWidget:SetPoint("TOPLEFT", desc, "BOTTOMLEFT", 0, -18)
-    function buttonWidget:SetText(txt) buttonWidget.label:SetText(txt or "") end
+    function buttonWidget:SetText(txt)
+        buttonWidget.label:SetText(txt or "")
+        ns.UIKit:FitFontString(buttonWidget.label, 212, 1)
+    end
 
     local hint = panelFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
     hint:SetPoint("TOPLEFT", buttonWidget, "BOTTOMLEFT", 0, -14)
