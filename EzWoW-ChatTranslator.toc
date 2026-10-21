@@ -22,7 +22,7 @@
 ## Notes-zhTW: 將韓語/中文/日語/俄語/英語/西班牙語聊天翻譯成本地語言（內建遊戲俚語和魔獸術語詞典）。
 ## Notes-jaJP: 韓国語・英語・中国語・日本語・ロシア語・スペイン語のチャットを内蔵のゲーム用語辞書で翻訳します。
 ## Author: qqhrqqhr2
-## Version: 2.0.2
+## Version: 2.0.3
 ## Category: EzWoW
 ## IconTexture: Interface\AddOns\EzWoW-ChatTranslator\Media\icon
 ## X-License: MIT

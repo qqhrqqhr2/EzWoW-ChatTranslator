@@ -1,4 +1,3 @@
-# v2.0.2
+# v2.0.3
 
-- 아이콘·창 위치 초기화 번역과 긴 문구 배치를 수정했습니다. (Translate position-reset controls and fit long labels.)
-- 툴팁 수집을 켜면 사전 검색을 즉시 시작합니다. (Start lexicon scanning when tooltip collection is enabled.)
+- 현지 언어(번역 결과 언어)를 상자를 누르고 목록에서 고르도록 바꿨습니다. (Pick the local (result) language from a drop-down list instead of radio buttons.)
