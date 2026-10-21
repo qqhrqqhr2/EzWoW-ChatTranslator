@@ -10,11 +10,14 @@ ns.UnknownTermLogger = UnknownTermLogger
 
 local NOISE = {}
 for boxWidth in ("wzzwjc lxqwzn tdzz mmm ny hanxiao crownless encore ing esw golhamz qjqtk qudtls shiling ou bing oldguard vae victis azerothcompendium dungeonjournal"):gmatch("%S+") do NOISE[boxWidth] = true end
+local URL_PARTS = { http = true, https = true, www = true, com = true, co = true, net = true, org = true, youtube = true, youtu = true, google = true, twitch = true, tv = true }
 function UnknownTermLogger.usefulUnknown(lang, word)
     if type(word) ~= "string" or word == "" then return false end
     if NOISE[word] then return false end
     if word:find("%a") and word:find("%d") then return false end
     if word:find("discord.gg",1,true) or word:find("https?://") then return false end
+    -- pieces of web links ("https", "www", "gg/foreverwow", "com/watch") are not chat words
+    if word:find("/", 1, true) or URL_PARTS[word] then return false end
     
     if #word <= 1 or (#word == 3 and word:byte(1) >= 224) then return false end
     if ns.LookupSlashCompoundTranslation and ns.LookupSlashCompoundTranslation(word, lang, "ko") then return false end

@@ -3516,4 +3516,7 @@ G团=골드팟(GDKP)=GDKP raid
 修血=체력 맞추기(양념)=even out HP
 R点=주사위 굴리기=roll
 让了=양보할게요(패스)=pass
+已备齐=다 준비됨=all set
+确定=확실해=sure
+均可=다 괜찮아요=either is fine
 ]=]

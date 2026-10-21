@@ -6619,4 +6619,63 @@ suche heiler=힐러 구함=looking for a healer
 suche dd=딜러 구함=looking for DPS
 chercher groupe=파티 구함=looking for group
 dispo=참가 가능=available
+vx=위챗(중국 메신저)=WeChat
+vs=대=versus
+launch=출시=launch
+servers=서버=servers
+stress test=부하 테스트=stress test
+stress=부하·스트레스=stress
+talking=말하는 중=talking
+skull=해골 징표(먼저 잡기)=skull marker (kill first)
+tar=대상 지정(/tar)=target
+lok=록타르(오크 함성)=Lok'tar
+sweats=빡겜러들=try-hards
+teams=팀=teams
+wouldnt=~하지 않을 거야=wouldn't
+wowf=와우 포에버=WoW Forever
+changing=바꾸는 중=changing
+mode=모드=mode
+fk=젠장=damn
+houndmaster=사냥개조련사=houndmaster
+scale=규모=scale
+stance=태세=stance
+taking=가져가는 중=taking
+able=할 수 있는=able
+dumb=멍청한=dumb
+dungon=던전=dungeon
+everytime=매번=every time
+major=큰=major
+sounds=~처럼 들려=sounds
+wf=질풍=Windfury
+yo=어이=hey
+arugal's=아루갈의=Arugal's
+giga=엄청=giga
+goin=가는 중=going
+losing=지는 중=losing
+mit=피해 경감=mitigation
+prob=아마=probably
+recall=귀환=recall
+showing=보여주는 중=showing
+sleeping=자는 중=sleeping
+spamming=도배하는 중=spamming
+stacked=강한 조합=stacked
+tanke=탱커=tank
+telling=말하는 중=telling
+touch=만지다=touch
+yourself=너 자신=yourself
+action=행동=action
+ctm=클릭 이동=click to move
+dhk=불명예 처치=dishonorable kill
+fee=수수료=fee
+fm=비행 조련사=flight master
+handsome=잘생긴=handsome
+immune=면역=immune
+log=기록=log
+lying=거짓말하는=lying
+meaningless=의미 없는=meaningless
+men=남자들=men
+multiple=여러=multiple
+noise=소음=noise
+op=사기급(너무 셈)=overpowered
+makes=만든다=makes
 ]=]
