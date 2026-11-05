@@ -59,8 +59,14 @@ function MinimapLauncherButton.onDragUpdate(self)
         end
     end
 
+    -- curX/curY are in the button's coordinate space (its parent is the
+    -- Minimap, which may be scaled); convert the UIParent size to match.
     local uiW = (UIParent and UIParent:GetWidth()) or 1920
     local uiH = (UIParent and UIParent:GetHeight()) or 1080
+    local uiScale = (UIParent and UIParent:GetEffectiveScale()) or bScale
+    if bScale > 0 and uiScale > 0 then
+        uiW, uiH = uiW * uiScale / bScale, uiH * uiScale / bScale
+    end
     if curX < 16 then curX = 16 elseif curX > uiW - 16 then curX = uiW - 16 end
     if curY < 16 then curY = 16 elseif curY > uiH - 16 then curY = uiH - 16 end
     ns.db.minimap.freeX = curX

@@ -90,7 +90,8 @@ function LexiconBackgroundScanner.inspectSpellbook()
             if apiInfo then
                 for index = apiInfo.itemIndexOffset + 1, apiInfo.itemIndexOffset + apiInfo.numSpellBookItems do
                     local isCallOk, item = pcall(C_SpellBook.GetSpellBookItemInfo, index, Enum.SpellBookSpellBank.Player)
-                    if isCallOk and item then addSpell(item.spellID or item.actionID) end
+                    -- flyouts carry a flyout ID in actionID, not a spell ID; only real spells have spellID
+                    if isCallOk and item then addSpell(item.spellID) end
                 end
             end
         end

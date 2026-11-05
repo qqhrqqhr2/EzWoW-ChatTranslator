@@ -2,12 +2,13 @@
 -- EzWoW - Chat Translator
 -- Modules/ChatFilter.lua : Real-Time Chat Channel Filter & Copyable Link Injector
 --===========================================================================
-local _, ns = ...
+local ADDON, ns = ...
 local type, pairs, ipairs, tonumber, tostring, select, pcall = type, pairs, ipairs, tonumber, tostring, select, pcall
 
 local ChatStreamFilter = ns.ChatStreamFilter or {}
 ns.ChatStreamFilter = ChatStreamFilter
-local L = ns.L
+-- ns.L is replaced when the target language changes, so always read the current table
+local L = setmetatable({}, { __index = function(_, k) return ns.L[k] end })
 local hasSecret = ns.IsSecret
 local safeString = ns.SafeString
 local detectDominantScriptLang = ns.DetectDominantScriptLanguage
@@ -528,7 +529,10 @@ function ns.PrintStatus()
         lineList[#lineList + 1] = ChatStreamFilter.cleanCodes(s)
         DEFAULT_CHAT_FRAME:AddMessage("|cff7ADAD4[EzWoW - Chat Translator]|r " .. s)
     end
-    anchorTarget("version=" .. tostring(GetAddOnMetadata and GetAddOnMetadata(ADDON, "Version") or "1.5.0"))
+    local getMetadata = (C_AddOns and C_AddOns.GetAddOnMetadata) or GetAddOnMetadata
+    local okMeta, version = false, nil
+    if type(getMetadata) == "function" then okMeta, version = pcall(getMetadata, ADDON or "EzWoW-ChatTranslator", "Version") end
+    anchorTarget("version=" .. tostring(okMeta and version or "unknown"))
     if GetBuildInfo then
         local version, build, _, interface = GetBuildInfo()
         anchorTarget("clientVersion=" .. tostring(version) .. " build=" .. tostring(build) .. " interface=" .. tostring(interface))

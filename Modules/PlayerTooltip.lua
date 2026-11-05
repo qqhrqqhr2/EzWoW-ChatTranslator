@@ -225,8 +225,9 @@ function ns.ShowPlayerTooltip(owner, link, fromRefresh)
         tooltipObj:SetUnit(unit)
         
         local titleStr = _G["EzWoWChatTranslatorPlayerTooltipTextLeft1"]
-        if titleStr then
-            local nameText = titleStr:GetText()
+        local nameText = titleStr and titleStr:GetText()
+        if titleStr and not UnitHoverInspector.hasSecret(nameText) then
+            -- unit names can be secret values (e.g. during encounters); never concatenate those
             titleStr:SetText("|cff7ADAD4EzWoW - Chat Translator|r\n" .. (nameText or name))
         else
             tooltipObj:AddLine("EzWoW - Chat Translator", 0.478, 0.855, 0.831)

@@ -557,9 +557,25 @@ function TooltipTranslationHook.registerTooltipHooks()
         pcall(TooltipTranslationHook.bindTooltip, tt, true)
     end
     if processor then
+        -- Only annotate tooltips the player can actually see. Other addons'
+        -- hidden scan tooltips (no name, hidden, or never anchored on screen)
+        -- must not receive extra lines.
+        local function isDisplayedTooltip(tt)
+            if not tt then return false end
+            if hooked[tt] then return true end
+            if tt.IsForbidden and tt:IsForbidden() then return false end
+            if not (tt.GetName and tt:GetName()) then return false end
+            if not (tt.IsVisible and tt:IsVisible()) then return false end
+            if tt.GetAlpha and tt:GetAlpha() <= 0 then return false end
+            local okLeft, left = pcall(tt.GetLeft, tt)
+            return okLeft and left ~= nil
+        end
         local function post(tt, data)
             
             if data and Enum.TooltipDataType.Unit and data.type == Enum.TooltipDataType.Unit then return end
+            if not isDisplayedTooltip(tt) then return end
+            -- Bind lazily so OnTooltipCleared resets the done flag on this tooltip too.
+            if not hooked[tt] then pcall(TooltipTranslationHook.bindTooltip, tt, false) end
             pcall(TooltipTranslationHook.processIncomingEntry, tt)
         end
         if TooltipDataProcessor.AllTypes then
