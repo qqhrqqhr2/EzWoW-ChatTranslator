@@ -26,9 +26,8 @@ local lineCache, lineOrder = {}, {}
 -- Current clients reserve the "addon" hyperlink type for addons: a click on
 -- |Haddon:<addon>:...|h is handed to EventRegistry "SetItemRef" callbacks and
 -- the default handler opens nothing for it, so SetItemRef never has to be
--- replaced. Only a client without EventRegistry keeps the old private link
--- types ("wct:<id>" = translation, "wctcopy:<id>" = copy) handled by the
--- legacy branch of bindItemRef.
+-- replaced. Links in the old private format ("wct:<id>" = translation,
+-- "wctcopy:<id>" = copy) are still recognized when clicked.
 -----------------------------------------------------------------------------
 local LINK_GLOSS, LINK_COPY = "gloss", "copy"
 local ADDON_LINK_HEAD = "addon:EzWoW-ChatTranslator:"
@@ -226,13 +225,6 @@ function ChatStreamFilter.queueSeparate(frame, outputList, separate)
         end
         if hooksecurefunc then
             hooksecurefunc(frame, "AddMessage", after)
-        else
-            local original = frame.AddMessage
-            frame.AddMessage = function(self, text, ...)
-                local result = original(self, text, ...)
-                after(self, text, ...)
-                return result
-            end
         end
     end
     if not pending.values[id] then
@@ -305,45 +297,6 @@ function ChatStreamFilter.registerFilters()
 end
 
 pcall(ChatStreamFilter.registerFilters)
-
-function ChatStreamFilter.processLine(text)
-    local _, recordEntry = text:find("|Hplayer:.-|h.-|h")
-    if not recordEntry then return nil end
-    local rest = text:sub(recordEntry + 1)
-    local sep, body = rest:match("^(.-:%s*)(.+)$")
-    if not sep or #sep > 40 then return nil end
-    local author = text:match("|Hplayer:([^:|]+)")
-    local outputList, separate = ChatStreamFilter.processIncomingEntry(body, author)
-    if not outputList then return nil end
-    return text:sub(1, recordEntry) .. sep .. outputList, separate
-end
-
-function ChatStreamFilter.bindAddMessage(frame)
-    if not frame or frame.wctOrigAddMessage or type(frame.AddMessage) ~= "function" then return end
-    local orig = frame.AddMessage
-    frame.wctOrigAddMessage = orig
-    frame.AddMessage = function(self, text, ...)
-        if safeString(text) and text:find("|Hplayer:", 1, true) then
-            local isCallOk, outputList, separate = pcall(ChatStreamFilter.processLine, text)
-            if isCallOk and outputList then
-                text = outputList
-                if separate then
-                    local rowEntry = orig(self, text, ...)
-                    orig(self, separate, ...)
-                    return rowEntry
-                end
-            elseif not isCallOk then ChatStreamFilter.noteError(outputList) end
-        end
-        return orig(self, text, ...)
-    end
-end
-
-function ChatStreamFilter.bindAllAddMessage()
-    for index = 1, (NUM_CHAT_WINDOWS or 10) do ChatStreamFilter.bindAddMessage(_G["ChatFrame" .. index]) end
-    if CHAT_FRAMES then
-        for _, displayName in ipairs(CHAT_FRAMES) do ChatStreamFilter.bindAddMessage(_G[displayName]) end
-    end
-end
 
 -----------------------------------------------------------------------------
 -- Present Gloss
@@ -652,43 +605,23 @@ function ChatStreamFilter.bindItemRef()
         return
     end
 
-    -- Fallback for clients without EventRegistry (and therefore without addon-link
-    -- dispatch): the old private link types would reach the default handler, so
-    -- only here the previous wrapper is kept.
-    ns.status.linkMode = "legacy"
-    local orig = SetItemRef
-    if type(orig) ~= "function" then return end
-    SetItemRef = function(link, text, button, chatFrame, ...)
-        if not safeString(link) then return orig(link, text, button, chatFrame, ...) end
-        if ChatStreamFilter.parseLink(link) then
-            ChatStreamFilter.activateLink(link)
-            return
-        end
-
-        if link:match("^player:") and button == "LeftButton"
-            and IsShiftKeyDown and IsShiftKeyDown() and ns.RequestPlayerInfo
-            and ns.db and ns.db.chat.playerTip ~= false
-            and not (ChatEdit_GetActiveWindow and ChatEdit_GetActiveWindow()) then
-            if ns.RequestPlayerInfo(link) then return end
-        end
-        return orig(link, text, button, chatFrame, ...)
-    end
+    -- Without EventRegistry there is no safe way to receive link clicks;
+    -- SetItemRef is never replaced, so translation links simply stay inactive.
+    ns.status.linkMode = "none"
 end
 
 local prevLogin = ns.OnLogin
 ns.OnLogin = function()
     if prevLogin then pcall(prevLogin) end
-    if not ChatStreamFilter.registerFilters() then
-        ns.status.method = "addmessage"
-        ChatStreamFilter.bindAllAddMessage()
-    end
+    -- Chat frames are never rewritten: without message filters, chat lines
+    -- are left untranslated.
+    ChatStreamFilter.registerFilters()
     local isCallOk, err = pcall(ChatStreamFilter.bindItemRef)
     if not isCallOk then ChatStreamFilter.noteError(err) end
     ChatStreamFilter.bindAllFrames()
     if FCF_OpenTemporaryWindow then
         hooksecurefunc("FCF_OpenTemporaryWindow", function()
             ChatStreamFilter.bindAllFrames()
-            if ns.status.method == "addmessage" then ChatStreamFilter.bindAllAddMessage() end
         end)
     end
 end

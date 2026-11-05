@@ -28,8 +28,8 @@ local resolveOptionsLocaleText = {
         sameLang = "현지 언어",
         minimapTip = "왼쪽 클릭: 설정 열기/닫기\n오른쪽 클릭: 미등록 표현 보기\n드래그: 아이콘 위치 이동",
         panelDesc = "다국어 채팅과 미번역 아이템·주문 툴팁을 내장 와우 용어 사전으로 번역해 표시합니다.",
-        panelBtn = "설정 (/ezct, /ezct)",
-        panelHint = "채팅창에 /ezct, /ezct 또는 /번역을 입력해도 열립니다.",
+        panelBtn = "설정 (/ezct)",
+        panelHint = "채팅창에 /ezct 또는 /번역을 입력해도 열립니다.",
         unknownEmpty = "아직 수집된 미등록 표현이 없습니다.",
         unknownCopyTitle = "미등록 표현 전체 복사: Ctrl+C",
         statusCopyTitle = "상태 정보 전체 복사: Ctrl+C",
@@ -46,7 +46,7 @@ local resolveOptionsLocaleText = {
         toggleOn = "채팅 번역: 켜짐",
         toggleOff = "채팅 번역: 꺼짐",
         collectedTitle = "툴팁에서 모은 미번역 문장 %d개 (Ctrl+C로 복사)", collectedEmpty = "아직 모은 문장이 없습니다.",
-        help = "/ezct (/ezct, /번역) - 설정창\n/ezct on|off - 채팅 번역 켜기/끄기\n/ezct lang <코드|auto> - 번역 대상 언어 변경\n/ezct en 문장 - 내 메시지를 외국어로 (en·de·fr·es·ru·zh·tw·ja·ko)\n/ezct search 단어 - 내장 사전 검색\n/ezct add 단어=뜻 - 나만의 단어 추가\n/ezct del 단어 - 삭제\n/ezct list - 추가한 단어 목록\n/ezct unknown - 채팅 미등록 표현\n/ezct collect - 툴팁 미번역 문장\n/ezct status - 상태 정보\n/ezct test 문장 - 풀이 시험",
+        help = "/ezct (/번역) - 설정창\n/ezct on|off - 채팅 번역 켜기/끄기\n/ezct lang <코드|auto> - 번역 대상 언어 변경\n/ezct en 문장 - 내 메시지를 외국어로 (en·de·fr·es·ru·zh·tw·ja·ko)\n/ezct search 단어 - 내장 사전 검색\n/ezct add 단어=뜻 - 나만의 단어 추가\n/ezct del 단어 - 삭제\n/ezct list - 추가한 단어 목록\n/ezct unknown - 채팅 미등록 표현\n/ezct collect - 툴팁 미번역 문장\n/ezct status - 상태 정보\n/ezct test 문장 - 풀이 시험",
         helpTitle = "명령어 목록",
     },
     en = {
@@ -63,8 +63,8 @@ local resolveOptionsLocaleText = {
         sameLang = "local language",
         minimapTip = "Left-click: Open/close settings\nRight-click: Unknown expressions\nDrag: Move icon",
         panelDesc = "Translates foreign chat and untranslated item/spell tooltips using a built-in WoW dictionary.",
-        panelBtn = "Settings (/ezct, /ezct)",
-        panelHint = "Type /ezct or /ezct in chat to open settings.",
+        panelBtn = "Settings (/ezct)",
+        panelHint = "Type /ezct in chat to open settings.",
         unknownEmpty = "No unknown expressions collected yet.",
         unknownCopyTitle = "Copy unknown expressions: Ctrl+C",
         statusCopyTitle = "Copy all status information: Ctrl+C",
@@ -81,7 +81,7 @@ local resolveOptionsLocaleText = {
         toggleOn = "Chat translation: ON",
         toggleOff = "Chat translation: OFF",
         collectedTitle = "Untranslated tooltip sentences: %d (Ctrl+C to copy)", collectedEmpty = "No sentences collected yet.",
-        help = "/ezct (/ezct) - settings\n/ezct on|off - toggle chat translation\n/ezct lang <code|auto> - switch target language\n/ezct en text - convert your message (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search word - search dictionary\n/ezct add word=meaning - add your own word\n/ezct del word - remove it\n/ezct list - your words\n/ezct unknown - unknown chat expressions\n/ezct collect - untranslated tooltip sentences\n/ezct status - status\n/ezct test text - test a message",
+        help = "/ezct - settings\n/ezct on|off - toggle chat translation\n/ezct lang <code|auto> - switch target language\n/ezct en text - convert your message (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search word - search dictionary\n/ezct add word=meaning - add your own word\n/ezct del word - remove it\n/ezct list - your words\n/ezct unknown - unknown chat expressions\n/ezct collect - untranslated tooltip sentences\n/ezct status - status\n/ezct test text - test a message",
         helpTitle = "Commands",
     },
     zhCN = {
@@ -96,8 +96,8 @@ local resolveOptionsLocaleText = {
         sameLang = "本地语言",
         minimapTip = "左键：打开/关闭设置\n右键：查看未登记词语\n拖动：移动按钮",
         panelDesc = "使用内置魔兽世界词典翻译外语聊天与未翻译的物品/法术提示。",
-        panelBtn = "设置 (/ezct, /ezct)",
-        panelHint = "在聊天框输入 /ezct 或 /ezct 也可打开设置。",
+        panelBtn = "设置 (/ezct)",
+        panelHint = "在聊天框输入 /ezct 也可打开设置。",
         unknownEmpty = "尚未收集到未登记表达。",
         unknownCopyTitle = "复制全部未登记表达：Ctrl+C",
         statusCopyTitle = "复制全部状态信息：Ctrl+C",
@@ -114,7 +114,7 @@ local resolveOptionsLocaleText = {
         toggleOn = "聊天翻译：已开启",
         toggleOff = "聊天翻译：已关闭",
         collectedTitle = "收集的未翻译提示句子：%d个（Ctrl+C复制）", collectedEmpty = "还没有收集到句子。",
-        help = "/ezct (/ezct) - 设置\n/ezct on|off - 开启/关闭聊天翻译\n/ezct lang <代码|auto> - 切换目标语言\n/ezct en 句子 - 把你的消息转换为外语（en、de、fr、es、ru、zh、tw、ja、ko）\n/ezct search 词语 - 搜索内置词典\n/ezct add 词语=意思 - 添加自定义词语\n/ezct del 词语 - 删除\n/ezct list - 自定义词语列表\n/ezct unknown - 未登记的聊天表达\n/ezct collect - 未翻译的提示句子\n/ezct status - 状态\n/ezct test 句子 - 测试",
+        help = "/ezct - 设置\n/ezct on|off - 开启/关闭聊天翻译\n/ezct lang <代码|auto> - 切换目标语言\n/ezct en 句子 - 把你的消息转换为外语（en、de、fr、es、ru、zh、tw、ja、ko）\n/ezct search 词语 - 搜索内置词典\n/ezct add 词语=意思 - 添加自定义词语\n/ezct del 词语 - 删除\n/ezct list - 自定义词语列表\n/ezct unknown - 未登记的聊天表达\n/ezct collect - 未翻译的提示句子\n/ezct status - 状态\n/ezct test 句子 - 测试",
         helpTitle = "命令列表",
     },
     ja = {
@@ -129,8 +129,8 @@ local resolveOptionsLocaleText = {
         sameLang = "翻訳先の言語",
         minimapTip = "左クリック：設定を開く/閉じる\n右クリック：未登録の表現を表示\nドラッグ：ボタンを移動",
         panelDesc = "内蔵のWoW用語辞書で外国語チャットや未翻訳のアイテム・呪文ツールチップを翻訳します。",
-        panelBtn = "設定 (/ezct, /ezct)",
-        panelHint = "チャット欄に /ezct または /ezct と入力しても開けます。",
+        panelBtn = "設定 (/ezct)",
+        panelHint = "チャット欄に /ezct と入力しても開けます。",
         unknownEmpty = "まだ収集された未登録の表現はありません。",
         unknownCopyTitle = "未登録の表現をすべてコピー：Ctrl+C",
         statusCopyTitle = "状態情報をすべてコピー：Ctrl+C",
@@ -147,7 +147,7 @@ local resolveOptionsLocaleText = {
         toggleOn = "チャット翻訳：オン",
         toggleOff = "チャット翻訳：オフ",
         collectedTitle = "収集した未翻訳の文：%d個（Ctrl+Cでコピー）", collectedEmpty = "まだ収集した文はありません。",
-        help = "/ezct (/ezct) - 設定\n/ezct on|off - チャット翻訳のオン/オフ\n/ezct lang <コード|auto> - 翻訳先の言語を変更\n/ezct en 文 - 自分のメッセージを外国語に（en・de・fr・es・ru・zh・tw・ja・ko）\n/ezct search 単語 - 辞書を検索\n/ezct add 単語=意味 - 単語を追加\n/ezct del 単語 - 削除\n/ezct list - 追加した単語\n/ezct unknown - 未登録のチャット表現\n/ezct collect - 未翻訳のツールチップ文\n/ezct status - 状態\n/ezct test 文 - テスト",
+        help = "/ezct - 設定\n/ezct on|off - チャット翻訳のオン/オフ\n/ezct lang <コード|auto> - 翻訳先の言語を変更\n/ezct en 文 - 自分のメッセージを外国語に（en・de・fr・es・ru・zh・tw・ja・ko）\n/ezct search 単語 - 辞書を検索\n/ezct add 単語=意味 - 単語を追加\n/ezct del 単語 - 削除\n/ezct list - 追加した単語\n/ezct unknown - 未登録のチャット表現\n/ezct collect - 未翻訳のツールチップ文\n/ezct status - 状態\n/ezct test 文 - テスト",
         helpTitle = "コマンド一覧",
     },
     ru = {
@@ -162,8 +162,8 @@ local resolveOptionsLocaleText = {
         sameLang = "родной язык",
         minimapTip = "ЛКМ: открыть/закрыть настройки\nПКМ: неизвестные выражения\nПеретаскивание: переместить",
         panelDesc = "Переводит иноязычный чат и непереведённые подсказки предметов и заклинаний с помощью встроенного словаря WoW.",
-        panelBtn = "Настройки (/ezct, /ezct)",
-        panelHint = "Введите /ezct или /ezct в чате, чтобы открыть настройки.",
+        panelBtn = "Настройки (/ezct)",
+        panelHint = "Введите /ezct в чате, чтобы открыть настройки.",
         unknownEmpty = "Неизвестные выражения ещё не собраны.",
         unknownCopyTitle = "Скопировать неизвестные выражения: Ctrl+C",
         statusCopyTitle = "Скопировать всю информацию о статусе: Ctrl+C",
@@ -180,7 +180,7 @@ local resolveOptionsLocaleText = {
         toggleOn = "Перевод чата: ВКЛ",
         toggleOff = "Перевод чата: ВЫКЛ",
         collectedTitle = "Непереведённые фразы подсказок: %d (Ctrl+C — копировать)", collectedEmpty = "Фраз пока нет.",
-        help = "/ezct (/ezct) - настройки\n/ezct on|off - вкл/выкл перевод чата\n/ezct lang <код|auto> - сменить язык\n/ezct en текст - перевести своё сообщение (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search слово - поиск по словарю\n/ezct add слово=значение - добавить слово\n/ezct del слово - удалить\n/ezct list - ваши слова\n/ezct unknown - неизвестные выражения чата\n/ezct collect - непереведённые фразы подсказок\n/ezct status - статус\n/ezct test текст - проверка",
+        help = "/ezct - настройки\n/ezct on|off - вкл/выкл перевод чата\n/ezct lang <код|auto> - сменить язык\n/ezct en текст - перевести своё сообщение (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search слово - поиск по словарю\n/ezct add слово=значение - добавить слово\n/ezct del слово - удалить\n/ezct list - ваши слова\n/ezct unknown - неизвестные выражения чата\n/ezct collect - непереведённые фразы подсказок\n/ezct status - статус\n/ezct test текст - проверка",
         helpTitle = "Команды",
         
         optTooltip = "Переводить описания предметов и заклинаний",
@@ -199,8 +199,8 @@ local resolveOptionsLocaleText = {
         sameLang = "idioma local",
         minimapTip = "Clic izquierdo: abrir/cerrar ajustes\nClic derecho: expresiones desconocidas\nArrastrar: mover el botón",
         panelDesc = "Traduce el chat en otros idiomas y las descripciones de objetos y hechizos mediante un diccionario integrado de WoW.",
-        panelBtn = "Ajustes (/ezct, /ezct)",
-        panelHint = "Escribe /ezct o /ezct en el chat para abrir los ajustes.",
+        panelBtn = "Ajustes (/ezct)",
+        panelHint = "Escribe /ezct en el chat para abrir los ajustes.",
         unknownEmpty = "Aún no se han recopilado expresiones desconocidas.",
         unknownCopyTitle = "Copiar expresiones desconocidas: Ctrl+C",
         statusCopyTitle = "Copiar toda la información de estado: Ctrl+C",
@@ -217,7 +217,7 @@ local resolveOptionsLocaleText = {
         toggleOn = "Traducción de chat: ACTIVADA",
         toggleOff = "Traducción de chat: DESACTIVADA",
         collectedTitle = "Frases de descripciones sin traducir: %d (Ctrl+C para copiar)", collectedEmpty = "Todavía no hay frases.",
-        help = "/ezct (/ezct) - ajustes\n/ezct on|off - activar/desactivar traducción\n/ezct lang <código|auto> - cambiar idioma\n/ezct en texto - convertir tu mensaje (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search palabra - buscar en el diccionario\n/ezct add palabra=significado - añadir palabra\n/ezct del palabra - borrar\n/ezct list - tus palabras\n/ezct unknown - expresiones desconocidas\n/ezct collect - frases sin traducir\n/ezct status - estado\n/ezct test texto - probar",
+        help = "/ezct - ajustes\n/ezct on|off - activar/desactivar traducción\n/ezct lang <código|auto> - cambiar idioma\n/ezct en texto - convertir tu mensaje (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search palabra - buscar en el diccionario\n/ezct add palabra=significado - añadir palabra\n/ezct del palabra - borrar\n/ezct list - tus palabras\n/ezct unknown - expresiones desconocidas\n/ezct collect - frases sin traducir\n/ezct status - estado\n/ezct test texto - probar",
         helpTitle = "Comandos",
     },
     de = {
@@ -233,8 +233,8 @@ local resolveOptionsLocaleText = {
         sameLang = "Zielsprache",
         minimapTip = "Linksklick: Einstellungen öffnen/schließen\nRechtsklick: Unbekannte Ausdrücke\nZiehen: Button verschieben",
         panelDesc = "Übersetzt fremdsprachigen Chat sowie nicht übersetzte Gegenstands- und Zauber-Tooltips mit einem integrierten WoW-Wörterbuch.",
-        panelBtn = "Einstellungen (/ezct, /ezct)",
-        panelHint = "Gib /ezct oder /ezct im Chat ein, um die Einstellungen zu öffnen.",
+        panelBtn = "Einstellungen (/ezct)",
+        panelHint = "Gib /ezct im Chat ein, um die Einstellungen zu öffnen.",
         unknownEmpty = "Noch keine unbekannten Ausdrücke gesammelt.",
         unknownCopyTitle = "Unbekannte Ausdrücke kopieren: Strg+C",
         statusCopyTitle = "Alle Statusinformationen kopieren: Strg+C",
@@ -251,7 +251,7 @@ local resolveOptionsLocaleText = {
         toggleOn = "Chat-Übersetzung: EIN",
         toggleOff = "Chat-Übersetzung: AUS",
         collectedTitle = "Nicht übersetzte Tooltip-Sätze: %d (Strg+C zum Kopieren)", collectedEmpty = "Noch keine Sätze gesammelt.",
-        help = "/ezct (/ezct) - Einstellungen\n/ezct on|off - Chat-Übersetzung ein/aus\n/ezct lang <Code|auto> - Sprache wechseln\n/ezct en Text - eigene Nachricht übersetzen (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search Wort - Wörterbuch durchsuchen\n/ezct add Wort=Bedeutung - eigenes Wort hinzufügen\n/ezct del Wort - löschen\n/ezct list - eigene Wörter\n/ezct unknown - unbekannte Chat-Ausdrücke\n/ezct collect - nicht übersetzte Tooltip-Sätze\n/ezct status - Status\n/ezct test Text - Nachricht testen",
+        help = "/ezct - Einstellungen\n/ezct on|off - Chat-Übersetzung ein/aus\n/ezct lang <Code|auto> - Sprache wechseln\n/ezct en Text - eigene Nachricht übersetzen (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search Wort - Wörterbuch durchsuchen\n/ezct add Wort=Bedeutung - eigenes Wort hinzufügen\n/ezct del Wort - löschen\n/ezct list - eigene Wörter\n/ezct unknown - unbekannte Chat-Ausdrücke\n/ezct collect - nicht übersetzte Tooltip-Sätze\n/ezct status - Status\n/ezct test Text - Nachricht testen",
         helpTitle = "Befehle",
     },
     fr = {
@@ -267,8 +267,8 @@ local resolveOptionsLocaleText = {
         sameLang = "langue cible",
         minimapTip = "Clic gauche : ouvrir/fermer les options\nClic droit : expressions inconnues\nGlisser : déplacer le bouton",
         panelDesc = "Traduit le chat multilingue et les infobulles d'objets ou de sorts non traduites grâce à un dictionnaire WoW intégré.",
-        panelBtn = "Options (/ezct, /ezct)",
-        panelHint = "Tapez /ezct ou /ezct dans le chat pour ouvrir les options.",
+        panelBtn = "Options (/ezct)",
+        panelHint = "Tapez /ezct dans le chat pour ouvrir les options.",
         unknownEmpty = "Aucune expression inconnue collectée pour le moment.",
         unknownCopyTitle = "Copier les expressions inconnues : Ctrl+C",
         statusCopyTitle = "Copier toutes les informations de statut : Ctrl+C",
@@ -285,7 +285,7 @@ local resolveOptionsLocaleText = {
         toggleOn = "Traduction du chat : ACTIVÉE",
         toggleOff = "Traduction du chat : DÉSACTIVÉE",
         collectedTitle = "Phrases d'infobulles non traduites : %d (Ctrl+C pour copier)", collectedEmpty = "Aucune phrase collectée pour le moment.",
-        help = "/ezct (/ezct) - options\n/ezct on|off - activer/désactiver la traduction\n/ezct lang <code|auto> - changer de langue\n/ezct en texte - convertir votre message (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search mot - chercher dans le dictionnaire\n/ezct add mot=sens - ajouter votre mot\n/ezct del mot - supprimer\n/ezct list - vos mots\n/ezct unknown - expressions inconnues\n/ezct collect - phrases d'infobulles non traduites\n/ezct status - statut\n/ezct test texte - tester un message",
+        help = "/ezct - options\n/ezct on|off - activer/désactiver la traduction\n/ezct lang <code|auto> - changer de langue\n/ezct en texte - convertir votre message (en, de, fr, es, ru, zh, tw, ja, ko)\n/ezct search mot - chercher dans le dictionnaire\n/ezct add mot=sens - ajouter votre mot\n/ezct del mot - supprimer\n/ezct list - vos mots\n/ezct unknown - expressions inconnues\n/ezct collect - phrases d'infobulles non traduites\n/ezct status - statut\n/ezct test texte - tester un message",
         helpTitle = "Commandes",
     },
 }
@@ -300,8 +300,8 @@ resolveOptionsLocaleText.zhTW.btnUnknown, resolveOptionsLocaleText.zhTW.btnColle
 resolveOptionsLocaleText.zhTW.langsShort, resolveOptionsLocaleText.zhTW.sameLang = "要翻譯的語言（排除本地語言）", "本地語言"
 resolveOptionsLocaleText.zhTW.minimapTip = "左鍵：開啟/關閉設定\n右鍵：查看未登記詞語\n拖曳：移動按鈕"
 resolveOptionsLocaleText.zhTW.panelDesc = "使用內建魔獸世界詞典翻譯外語聊天與未翻譯的物品/法術提示。"
-resolveOptionsLocaleText.zhTW.panelBtn = "設定 (/ezct, /ezct)"
-resolveOptionsLocaleText.zhTW.panelHint = "在聊天框輸入 /ezct 或 /ezct 也可開啟設定。"
+resolveOptionsLocaleText.zhTW.panelBtn = "設定 (/ezct)"
+resolveOptionsLocaleText.zhTW.panelHint = "在聊天框輸入 /ezct 也可開啟設定。"
 resolveOptionsLocaleText.zhTW.unknownEmpty = "尚未收集到未登記表達。"
 resolveOptionsLocaleText.zhTW.unknownCopyTitle = "複製全部未登記表達：Ctrl+C"
 resolveOptionsLocaleText.zhTW.statusCopyTitle = "複製全部狀態資訊：Ctrl+C"
@@ -319,7 +319,7 @@ resolveOptionsLocaleText.zhTW.searchTitle = "詞典搜尋結果（%s）：%d筆"
 resolveOptionsLocaleText.zhTW.toggleOn = "聊天翻譯：已開啟"
 resolveOptionsLocaleText.zhTW.toggleOff = "聊天翻譯：已關閉"
 resolveOptionsLocaleText.zhTW.collectedTitle, resolveOptionsLocaleText.zhTW.collectedEmpty = "收集的未翻譯提示句子：%d個（Ctrl+C複製）", "還沒有收集到句子。"
-resolveOptionsLocaleText.zhTW.help = "/ezct (/ezct) - 設定\n/ezct on|off - 開啟/關閉聊天翻譯\n/ezct lang <代碼|auto> - 切換目標語言\n/ezct en 句子 - 把你的訊息轉換為外語（en、de、fr、es、ru、zh、tw、ja、ko）\n/ezct search 詞語 - 搜尋內建詞典\n/ezct add 詞語=意思 - 新增自訂詞語\n/ezct del 詞語 - 刪除\n/ezct list - 自訂詞語列表\n/ezct unknown - 未登記的聊天表達\n/ezct collect - 未翻譯的提示句子\n/ezct status - 狀態\n/ezct test 句子 - 測試"
+resolveOptionsLocaleText.zhTW.help = "/ezct - 設定\n/ezct on|off - 開啟/關閉聊天翻譯\n/ezct lang <代碼|auto> - 切換目標語言\n/ezct en 句子 - 把你的訊息轉換為外語（en、de、fr、es、ru、zh、tw、ja、ko）\n/ezct search 詞語 - 搜尋內建詞典\n/ezct add 詞語=意思 - 新增自訂詞語\n/ezct del 詞語 - 刪除\n/ezct list - 自訂詞語列表\n/ezct unknown - 未登記的聊天表達\n/ezct collect - 未翻譯的提示句子\n/ezct status - 狀態\n/ezct test 句子 - 測試"
 resolveOptionsLocaleText.zhTW.helpTitle = "指令列表"
 resolveOptionsLocaleText.zhTW.optCopyAll = "點擊任何訊息都可複製（包括未翻譯的）"
 

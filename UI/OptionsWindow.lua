@@ -410,9 +410,8 @@ local LANG_ARG_MAP = {
 }
 
 SLASH_EZWOWCHATTRANSLATOR1 = "/ezct"
-SLASH_EZWOWCHATTRANSLATOR2 = "/ezct"
-SLASH_EZWOWCHATTRANSLATOR3 = "/번역"
-SLASH_EZWOWCHATTRANSLATOR4 = "/외국어"
+SLASH_EZWOWCHATTRANSLATOR2 = "/번역"
+SLASH_EZWOWCHATTRANSLATOR3 = "/외국어"
 SlashCmdList.EZWOWCHATTRANSLATOR = function(raw)
     raw = (raw or ""):gsub("^%s+", ""):gsub("%s+$", "")
     local rawMessage = raw:lower()
@@ -490,8 +489,8 @@ function SettingsDialog.registerPanel()
 
     function panelFrame:RefreshTexts()
         desc:SetText(L.panelDesc or "Translates foreign chat and untranslated item/spell tooltips using a built-in WoW dictionary.")
-        buttonWidget:SetText(L.panelBtn or ((SETTINGS or "Settings") .. " (/ezct, /ezct)"))
-        hint:SetText(L.panelHint or "Type /ezct or /ezct in chat to open settings.")
+        buttonWidget:SetText(L.panelBtn or ((SETTINGS or "Settings") .. " (/ezct)"))
+        hint:SetText(L.panelHint or "Type /ezct in chat to open settings.")
     end
     panelFrame:SetScript("OnShow", function(self) self:RefreshTexts() end)
     panelFrame:RefreshTexts()
