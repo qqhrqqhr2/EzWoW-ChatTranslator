@@ -46,7 +46,7 @@ WoW Forever (`Interface: 16001`) · `v1.5.0` · `/ezct`
 #### 그 밖의 기능
 
 - **숫자·모집 표현 해석**: `30g`, `1.5k`, `lvl40`, `lf2m`, `8pm`, `4=1`(4명 있음, 1명 구함), 한/영 자판 실수, `invvvvv` 같은 늘어진 철자도 알아듣습니다.
-- **채팅 이름 캐릭터 정보**: 채팅창의 캐릭터 이름을 **Shift + 좌클릭**하면 레벨·종족·직업·길드를 조회해(최소 3초 간격, 2초 대기) 이름 툴팁에 보여 줍니다.
+- **채팅 이름 캐릭터 정보**: 채팅창의 캐릭터 이름을 **Shift + 좌클릭**하면 게임 기본 /who 조회가 실행되고, 그 결과의 레벨·종족·직업·길드를 이름 툴팁에도 보여 줍니다(최대 2초 대기).
 - **툴팁 번역**: 번역이 없는 영어 아이템·주문·세트 효과·전문기술 문장을 툴팁 아래 `EzWoW - Chat Translator` 칸에 번역해 보여 줍니다.
 - **미등록 표현 수집**: 사전에 없는 외국어 채팅 예문(`/ezct 미등록`)과 툴팁 미번역 문장(`/ezct 수집`)을 모아 복사창으로 보여 줍니다. 사전 보강에 쓸 수 있습니다.
 - **나만의 단어장**: `/ezct add 단어=뜻`으로 길드 약어 등을 직접 등록하면 번역에 함께 쓰입니다.
@@ -133,7 +133,7 @@ Chat Translator appends a **language tag and a rough meaning** to foreign-langua
 #### More features
 
 - **Numbers and LFG patterns**: understands `30g`, `1.5k`, `lvl40`, `lf2m`, `8pm`, `4=1` (have 4, need 1), Korean/English keyboard-layout mistakes and stretched spellings like `invvvvv`.
-- **Character info on chat names**: **Shift + left-click** a name in chat to look up level, race, class and guild (at most once every 3 s, 2 s timeout) and show it in the name tooltip.
+- **Character info on chat names**: **Shift + left-click** a name in chat to run the game's own /who lookup; its level, race, class and guild are also shown in the name tooltip (2 s timeout).
 - **Tooltip translation**: untranslated English item, spell, set-bonus and profession lines are translated in an `EzWoW - Chat Translator` section at the bottom of the tooltip.
 - **Collecting unknown text**: foreign chat with no dictionary match (`/ezct unknown`) and untranslated tooltip lines (`/ezct collect`) are collected into a copy box, useful for extending the dictionary.
 - **Your own words**: `/ezct add word=meaning` registers guild slang etc. and uses it in translations.

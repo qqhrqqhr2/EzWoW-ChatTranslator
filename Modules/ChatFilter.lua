@@ -21,6 +21,49 @@ local KEEP = 600
 local entryList, nextId = {}, 0
 local lineCache, lineOrder = {}, {}
 
+-----------------------------------------------------------------------------
+-- Link Format
+-- Current clients reserve the "addon" hyperlink type for addons: a click on
+-- |Haddon:<addon>:...|h is handed to EventRegistry "SetItemRef" callbacks and
+-- the default handler opens nothing for it, so SetItemRef never has to be
+-- replaced. Only a client without EventRegistry keeps the old private link
+-- types ("wct:<id>" = translation, "wctcopy:<id>" = copy) handled by the
+-- legacy branch of bindItemRef.
+-----------------------------------------------------------------------------
+local LINK_GLOSS, LINK_COPY = "gloss", "copy"
+local ADDON_LINK_HEAD = "addon:EzWoW-ChatTranslator:"
+local ADDON_LINK_PATTERN = "^addon:EzWoW%-ChatTranslator:(%a+):(%d+)"
+local useAddonLinks = type(EventRegistry) == "table" and type(EventRegistry.RegisterCallback) == "function"
+
+function ChatStreamFilter.linkCode(action, id)
+    if useAddonLinks then return ("|H%s%s:%d|h"):format(ADDON_LINK_HEAD, action, id) end
+    return ("|H%s:%d|h"):format(action == LINK_COPY and "wctcopy" or "wct", id)
+end
+
+-- Returns action, numeric id, isLegacy for any link this addon has ever printed.
+function ChatStreamFilter.parseLink(link)
+    if not safeString(link) then return nil end
+    local action, id = link:match(ADDON_LINK_PATTERN)
+    if action then return action, tonumber(id), false end
+    id = link:match("^wctcopy:(%d+)")
+    if id then return LINK_COPY, tonumber(id), true end
+    id = link:match("^wct:(%d+)")
+    if id then return LINK_GLOSS, tonumber(id), true end
+    return nil
+end
+
+function ChatStreamFilter.hasLegacyLink(msg)
+    return msg:find("|Hwct:", 1, true) ~= nil or msg:find("|Hwctcopy:", 1, true) ~= nil
+end
+
+function ChatStreamFilter.hasOwnLink(msg)
+    return msg:find("|H" .. ADDON_LINK_HEAD, 1, true) ~= nil or ChatStreamFilter.hasLegacyLink(msg)
+end
+
+function ChatStreamFilter.findLinkId(text)
+    return text:match("|Haddon:EzWoW%-ChatTranslator:%a+:(%d+)") or text:match("|Hwctcopy:(%d+)") or text:match("|Hwct:(%d+)")
+end
+
 function ChatStreamFilter.cleanCodes(msg)
     msg = msg:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
     msg = msg:gsub("|T.-|t", ""):gsub("|A.-|a", "")
@@ -70,7 +113,7 @@ function ChatStreamFilter.injectClickableCopyLinks(msg, id)
             until index > #msg or (msg:sub(index, index) == "|" and msg:sub(index, index + 1) ~= "||")
             local text = msg:sub(start, index - 1)
             if text:find("%S") then
-                outputList[#outputList + 1] = ("|Hwctcopy:%d|h%s|h"):format(id, text)
+                outputList[#outputList + 1] = ChatStreamFilter.linkCode(LINK_COPY, id) .. text .. "|h"
             else
                 outputList[#outputList + 1] = text
             end
@@ -97,7 +140,7 @@ ns.CHANNEL_KIND = CHANNEL_KIND
 
 function ChatStreamFilter.copyOnly(msg, author)
     if not ns.db.chat.copyAll then return nil end
-    if msg:find("|Hwct:", 1, true) or msg:find("|Hwctcopy:", 1, true) then return nil end
+    if ChatStreamFilter.hasOwnLink(msg) then return nil end
     local id = ChatStreamFilter.newEntry(ChatStreamFilter.plainTextEntry(msg), nil, author)
     return ChatStreamFilter.injectClickableCopyLinks(msg, id)
 end
@@ -105,7 +148,7 @@ end
 function ChatStreamFilter.processIncomingEntry(msg, author, event)
     local savedDB = ns.db
     if not savedDB or not savedDB.chat.enabled or type(msg) ~= "string" or msg == "" then return nil end
-    if msg:find("|Hwct:", 1, true) or msg:find("|Hwctcopy:", 1, true) then return nil end
+    if ChatStreamFilter.hasOwnLink(msg) then return nil end
     local kind = event and CHANNEL_KIND[event]
     if kind and savedDB.chat.channels and savedDB.chat.channels[kind] == false then return ChatStreamFilter.copyOnly(msg, author) end
     ns.status.seen = ns.status.seen + 1
@@ -135,12 +178,12 @@ function ChatStreamFilter.processIncomingEntry(msg, author, event)
     if ns.RecordUnknownChat then ns.RecordUnknownChat(plainText, lang, greenVal) end
     local body, wrapped = ChatStreamFilter.injectClickableCopyLinks(msg, id), true
     if savedDB.chat.hoverAll and not msg:find("|", 1, true) then
-        body = ("|Hwct:%d|h%s|h"):format(id, msg)
+        body = ChatStreamFilter.linkCode(LINK_GLOSS, id) .. msg .. "|h"
         wrapped = true
     end
     local tag = ""
     if savedDB.chat.tag then
-        tag = ("|cff%s|Hwct:%d|h[%s]|h|r "):format(TAG_COLOR[lang], id, L.tag[lang])
+        tag = ("|cff%s%s[%s]|h|r "):format(TAG_COLOR[lang], ChatStreamFilter.linkCode(LINK_GLOSS, id), L.tag[lang])
     end
     local suffix, separate = "", nil
     if savedDB.chat.inline and greenVal.found > 0 and greenVal.cover >= (savedDB.chat.minCover or 40) then
@@ -165,7 +208,7 @@ end
 
 function ChatStreamFilter.queueSeparate(frame, outputList, separate)
     if not frame or type(frame.AddMessage) ~= "function" then return end
-    local id = outputList:match("|Hwctcopy:(%d+)") or outputList:match("|Hwct:(%d+)")
+    local id = ChatStreamFilter.findLinkId(outputList)
     if not id then return end
     local pending = frame.wctSeparatePending
     if not pending then
@@ -174,7 +217,7 @@ function ChatStreamFilter.queueSeparate(frame, outputList, separate)
         
         local function after(self, text, ...)
             if not safeString(text) then return end
-            local lookupKey = text:match("|Hwctcopy:(%d+)") or text:match("|Hwct:(%d+)")
+            local lookupKey = ChatStreamFilter.findLinkId(text)
             local meaning = lookupKey and pending.values[lookupKey]
             if meaning then
                 pending.values[lookupKey] = nil
@@ -343,19 +386,56 @@ function ChatStreamFilter.presentGloss(owner, id)
     GameTooltip:Show()
 end
 
+-----------------------------------------------------------------------------
+-- Legacy Link Cleanup
+-- Lines printed by an older version (or restored by a chat-history addon after
+-- /reload) can still carry the old private link types. Their entries are gone
+-- after a reload, and the default click handler does not know those types, so
+-- on clients using addon links they are turned back into plain text in the
+-- chat history. Skipped silently when the chat frame cannot rewrite history.
+-----------------------------------------------------------------------------
+function ChatStreamFilter.stripLegacyLinks(text)
+    return (text:gsub("|Hwctcopy:%d+|h(.-)|h", "%1"):gsub("|Hwct:%d+|h(.-)|h", "%1"))
+end
+
+function ChatStreamFilter.sweepLegacyLinks(frame)
+    if not frame then return end
+    frame.wctLegacySweepQueued = nil
+    if type(frame.TransformMessages) ~= "function" then return end
+    local isCallOk, err = pcall(frame.TransformMessages, frame, function(entry)
+        local message = type(entry) == "table" and entry.message
+        return safeString(message) and ChatStreamFilter.hasLegacyLink(message) or false
+    end, function(entry)
+        if type(entry) == "table" and safeString(entry.message) then
+            entry.message = ChatStreamFilter.stripLegacyLinks(entry.message)
+        end
+        return entry
+    end)
+    if not isCallOk then ChatStreamFilter.noteError(err) end
+end
+
+function ChatStreamFilter.queueLegacySweep(frame)
+    if not frame or frame.wctLegacySweepQueued then return end
+    frame.wctLegacySweepQueued = true
+    if C_Timer and C_Timer.After then
+        C_Timer.After(0, function() ChatStreamFilter.sweepLegacyLinks(frame) end)
+    else
+        ChatStreamFilter.sweepLegacyLinks(frame)
+    end
+end
+
 local hooked = {}
 function ChatStreamFilter.bindFrame(frame)
     if not frame or hooked[frame] then return end
     hooked[frame] = true
     frame:HookScript("OnHyperlinkEnter", function(self, link)
         if not safeString(link) then return end
-        local id = type(link) == "string" and link:match("^wct:(%d+)")
-        local copyID = type(link) == "string" and link:match("^wctcopy:(%d+)")
-        if copyID then
-            local recordEntry = entryList[tonumber(copyID)]
-            if recordEntry and recordEntry.lang then ChatStreamFilter.presentGloss(self, tonumber(copyID)) end
-        elseif id then
-            ChatStreamFilter.presentGloss(self, tonumber(id))
+        local action, id = ChatStreamFilter.parseLink(link)
+        if action == LINK_COPY then
+            local recordEntry = id and entryList[id]
+            if recordEntry and recordEntry.lang then ChatStreamFilter.presentGloss(self, id) end
+        elseif action == LINK_GLOSS then
+            if id then ChatStreamFilter.presentGloss(self, id) end
         elseif ns.ShowPlayerTooltip and ns.db and ns.db.chat.playerTip ~= false then
             ns.ShowPlayerTooltip(self, link)
         end
@@ -364,6 +444,12 @@ function ChatStreamFilter.bindFrame(frame)
         if GameTooltip:GetOwner() == self then GameTooltip:Hide() end
         if ns.HidePlayerTooltip then ns.HidePlayerTooltip(self) end
     end)
+    if useAddonLinks and hooksecurefunc and type(frame.AddMessage) == "function" then
+        hooksecurefunc(frame, "AddMessage", function(self, text)
+            if safeString(text) and ChatStreamFilter.hasLegacyLink(text) then ChatStreamFilter.queueLegacySweep(self) end
+        end)
+        ChatStreamFilter.queueLegacySweep(frame)
+    end
 end
 
 function ChatStreamFilter.bindAllFrames()
@@ -484,17 +570,102 @@ end
 -----------------------------------------------------------------------------
 -- Bind Item Ref
 -----------------------------------------------------------------------------
-function ChatStreamFilter.bindItemRef()
-    local orig = SetItemRef
-    SetItemRef = function(link, text, button, chatFrame, ...)
-        if not safeString(link) then return orig(link, text, button, chatFrame, ...) end
-        if type(link) == "string" and (link:sub(1, 4) == "wct:" or link:sub(1, 8) == "wctcopy:") then
-            local recordEntry = entryList[tonumber(link:match("^wct:(%d+)") or link:match("^wctcopy:(%d+)"))]
-            if recordEntry then ns.OpenCopyableChatDialog(recordEntry.text) end
+-- Clicking a translation or copy link opens the copy box for that chat line.
+function ChatStreamFilter.activateLink(link)
+    local action, id = ChatStreamFilter.parseLink(link)
+    if not action then return false end
+    local recordEntry = id and entryList[id]
+    if recordEntry then ns.OpenCopyableChatDialog(recordEntry.text) end
+    return true
+end
+
+local lastHandledLink, lastHandledAt
+local function clickTime() return GetTime and GetTime() or 0 end
+
+-- EventRegistry "SetItemRef" callback. The argument layout (owner first or
+-- not) differs between client versions, so take the first argument that is
+-- one of this addon's links.
+function ChatStreamFilter.onRegistryItemRef(...)
+    for index = 1, select("#", ...) do
+        local value = select(index, ...)
+        if safeString(value) and value:find(ADDON_LINK_HEAD, 1, true) == 1 then
+            if ChatStreamFilter.activateLink(value) then
+                lastHandledLink, lastHandledAt = value, clickTime()
+            end
             return
         end
-        
-        if type(link) == "string" and link:match("^player:") and button == "LeftButton"
+    end
+end
+
+local function shiftClickModifier()
+    if IsModifiedClick then
+        local isCallOk, isDown = pcall(IsModifiedClick, "CHATLINK")
+        if isCallOk then return isDown end
+    end
+    return IsShiftKeyDown and IsShiftKeyDown()
+end
+
+-- Post-hook on the default SetItemRef: it never changes what the default
+-- handler does.
+-- * Own addon links: normally already handled by the EventRegistry callback in
+--   the same click; handled here only if that callback did not run.
+-- * Old-format links (only from restored chat history): the default handler has
+--   nothing to show for them, so close the empty reference tooltip it opened.
+-- * Shift + left-click on a player name: the default handler already sends its
+--   own /who for that name (or inserts the name into an open chat input). The
+--   addon no longer sends a second /who; it only shows "loading" in the name
+--   tooltip and fills it from the result of that default /who.
+function ChatStreamFilter.afterItemRef(link, text, button, chatFrame)
+    if not safeString(link) then return end
+    local action, _, legacy = ChatStreamFilter.parseLink(link)
+    if action then
+        local handled = not legacy and lastHandledLink == link and lastHandledAt == clickTime()
+        lastHandledLink, lastHandledAt = nil, nil
+        if handled then return end
+        if not legacy then ChatStreamFilter.activateLink(link) end
+        if ItemRefTooltip and ItemRefTooltip.IsShown and ItemRefTooltip:IsShown() then
+            pcall(ItemRefTooltip.Hide, ItemRefTooltip)
+        end
+        return
+    end
+    if button == "LeftButton" and link:find("player:", 1, true) == 1 and ns.NotePlayerLookupClick
+        and ns.db and ns.db.chat.playerTip ~= false and shiftClickModifier()
+        and not (ChatEdit_GetActiveWindow and ChatEdit_GetActiveWindow()) then
+        ns.NotePlayerLookupClick(link)
+    end
+end
+
+function ChatStreamFilter.bindItemRef()
+    if ChatStreamFilter.itemRefBound then return end
+    ChatStreamFilter.itemRefBound = true
+    if useAddonLinks then
+        -- Never replaces SetItemRef: listen for addon-link clicks and post-hook the default handler.
+        ns.status.linkMode = "addon"
+        local isCallOk, err = pcall(EventRegistry.RegisterCallback, EventRegistry, "SetItemRef", ChatStreamFilter.onRegistryItemRef, ChatStreamFilter)
+        if not isCallOk then ChatStreamFilter.noteError(err) end
+        if hooksecurefunc and type(SetItemRef) == "function" then
+            hooksecurefunc("SetItemRef", function(...)
+                local hookOk, hookErr = pcall(ChatStreamFilter.afterItemRef, ...)
+                if not hookOk then ChatStreamFilter.noteError(hookErr) end
+            end)
+        end
+        return
+    end
+
+    -- Fallback for clients without EventRegistry (and therefore without addon-link
+    -- dispatch): the old private link types would reach the default handler, so
+    -- only here the previous wrapper is kept.
+    ns.status.linkMode = "legacy"
+    local orig = SetItemRef
+    if type(orig) ~= "function" then return end
+    SetItemRef = function(link, text, button, chatFrame, ...)
+        if not safeString(link) then return orig(link, text, button, chatFrame, ...) end
+        if ChatStreamFilter.parseLink(link) then
+            ChatStreamFilter.activateLink(link)
+            return
+        end
+
+        if link:match("^player:") and button == "LeftButton"
             and IsShiftKeyDown and IsShiftKeyDown() and ns.RequestPlayerInfo
             and ns.db and ns.db.chat.playerTip ~= false
             and not (ChatEdit_GetActiveWindow and ChatEdit_GetActiveWindow()) then
@@ -542,7 +713,8 @@ function ns.PrintStatus()
     anchorTarget("seen=" .. stateEntry.seen .. "  tagged=" .. stateEntry.tagged .. "  target=" .. tostring(ns.ResolveTargetLanguageCode())
         .. " (setting=" .. tostring(ns.db and ns.db.target) .. ", client=" .. tostring(GetLocale()) .. ")")
     anchorTarget("ChatFrame_AddMessageEventFilter=" .. type(ChatFrame_AddMessageEventFilter)
-        .. "  ChatFrameUtil=" .. type(ChatFrameUtil) .. "  SetItemRef=" .. type(SetItemRef))
+        .. "  ChatFrameUtil=" .. type(ChatFrameUtil) .. "  SetItemRef=" .. type(SetItemRef)
+        .. "  links=" .. tostring(stateEntry.linkMode) .. "  EventRegistry=" .. type(EventRegistry))
     local sample = "lfg RF Quest"
     anchorTarget("test: \"" .. sample .. "\" -> " .. tostring(detectDominantScriptLang(sample)))
     if ns.playerLookupStatus then

@@ -163,6 +163,24 @@ function ns.RequestPlayerInfo(link)
     return true
 end
 
+-- Shift-click on clients where the default handler runs its own /who for the
+-- name (see ChatFilter afterItemRef): no second query is sent, the name tooltip
+-- just waits for that result and reads it from the /who list.
+local awaiting
+function ns.NotePlayerLookupClick(link)
+    local name = type(link) == "string" and link:match("^player:([^:]+)")
+    if not name or UnitHoverInspector.hasSecret(name) then return end
+    ns.playerLookupStatus.clicks = (ns.playerLookupStatus.clicks or 0) + 1
+    ns.playerLookupStatus.requestSource = "default-who"
+    local key = buildPlayerCacheKey(name)
+    local apiInfo = key and lookupCache[key]
+    if key and not (apiInfo and apiInfo.level) then
+        failedUntil[key] = nil
+        awaiting = {name = name, started = UnitHoverInspector.getCurrentTimestamp()}
+    end
+    ns.playerLookupStatus.tooltipDirty = true
+end
+
 local tooltipDirty = false
 function UnitHoverInspector.syncHoveredTooltip()
     if not hoveredOwner or not hoveredLink or not tipWidget then return end
@@ -259,7 +277,10 @@ function ns.ShowPlayerTooltip(owner, link, fromRefresh)
     if zone and zone ~= "" then tooltipObj:AddLine(zone, 0.7, 0.7, 0.7) end
     if not level then
         local currentTime, message = UnitHoverInspector.getCurrentTimestamp()
-        if pending then
+        if awaiting and buildPlayerCacheKey(awaiting.name) == buildPlayerCacheKey(name)
+            and currentTime - awaiting.started < RESPONSE_TIMEOUT then
+            message = UnitHoverInspector.extractSafeTooltipText("loading", math.max(0, math.ceil(RESPONSE_TIMEOUT - (currentTime - awaiting.started))))
+        elseif pending then
             local remaining = math.max(0, math.ceil(RESPONSE_TIMEOUT - (currentTime - pending.started)))
             if buildPlayerCacheKey(pending.name) == buildPlayerCacheKey(name) then
                 message = UnitHoverInspector.extractSafeTooltipText("loading", remaining)
@@ -331,6 +352,21 @@ events:SetScript("OnUpdate", function(self, dt)
             tooltipDirty = true
         end
     end
+    if awaiting then
+        UnitHoverInspector.gatherWho()
+        local awaitedKey = buildPlayerCacheKey(awaiting.name)
+        local apiInfo = awaitedKey and lookupCache[awaitedKey]
+        if apiInfo and apiInfo.level then
+            UnitHoverInspector.updateLookupStatusText("received", awaiting.name)
+            awaiting = nil
+            tooltipDirty = true
+        elseif currentTime - awaiting.started >= RESPONSE_TIMEOUT then
+            UnitHoverInspector.updateLookupStatusText("timeout", awaiting.name)
+            if awaitedKey then failedUntil[awaitedKey] = currentTime + 60 end
+            awaiting = nil
+            tooltipDirty = true
+        end
+    end
     if pending and currentTime - pending.started >= RESPONSE_TIMEOUT then
         local name = pending.name
         UnitHoverInspector.updateLookupStatusText("timeout", name)
@@ -344,7 +380,7 @@ events:SetScript("OnUpdate", function(self, dt)
     if hoveredOwner and hoveredLink and second ~= lastDisplaySecond then
         local hname = hoveredLink:match("^player:([^:]+)")
         local hinfo = hname and lookupCache[buildPlayerCacheKey(hname)]
-        needTick = not (hinfo and hinfo.level) and (pending ~= nil or currentTime < nextAllowed + 1.5)
+        needTick = not (hinfo and hinfo.level) and (pending ~= nil or awaiting ~= nil or currentTime < nextAllowed + 1.5)
     end
     if tooltipDirty or ns.playerLookupStatus.tooltipDirty or needTick then
         lastDisplaySecond = second
