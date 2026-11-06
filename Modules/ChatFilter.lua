@@ -205,35 +205,71 @@ function ChatStreamFilter.noteError(err)
     ns.status.lastError = tostring(err)
 end
 
+-- Per-frame state lives in weak-keyed side tables: writing fields onto chat
+-- frames would taint them for the default UI.
+local separatePendingByFrame = setmetatable({}, { __mode = "k" })
+local legacySweepQueued = setmetatable({}, { __mode = "k" })
+local hooked = setmetatable({}, { __mode = "k" })
+
+-----------------------------------------------------------------------------
+-- Separate Translation Line
+-- Chat frames never get an AddMessage hook. When the client opens or re-opens
+-- a chat window it fills it in its own copy loop (read line, compare its
+-- access id, AddMessage, next line); any addon hook on AddMessage runs inside
+-- that loop and makes the next compare fail, and a hook can never be removed.
+-- Instead the message filter queues the "↳" line, and on the next frame it is
+-- printed with a plain AddMessage call from this addon's own timer, but only
+-- if the chat line it belongs to really reached that frame (a filter also runs
+-- for frames that later drop the line, e.g. another channel or a whisper that
+-- went to its own window).
+-----------------------------------------------------------------------------
+local SEPARATE_SCAN = 40
+local SEPARATE_MAX = 200
+
+-- True when one of the newest lines of the frame carries the link id.
+function ChatStreamFilter.frameShowsLink(frame, id, skipText)
+    if type(frame.GetNumMessages) ~= "function" or type(frame.GetMessageInfo) ~= "function" then return true end
+    local count = frame:GetNumMessages()
+    if type(count) ~= "number" or hasSecret(count) then return true end
+    local last = count - SEPARATE_SCAN + 1
+    if last < 1 then last = 1 end
+    for index = count, last, -1 do
+        local text = frame:GetMessageInfo(index)
+        if safeString(text) and text ~= skipText and ChatStreamFilter.findLinkId(text) == id then return true end
+    end
+    return false
+end
+
+function ChatStreamFilter.flushSeparate(frame)
+    local pending = separatePendingByFrame[frame]
+    separatePendingByFrame[frame] = nil
+    if not pending then return end
+    for _, item in ipairs(pending.list) do
+        local isCallOk, shown = pcall(ChatStreamFilter.frameShowsLink, frame, item.id, item.text)
+        if not isCallOk then ChatStreamFilter.noteError(shown) shown = false end
+        if shown then
+            local addOk, err = pcall(frame.AddMessage, frame, item.text)
+            if not addOk then ChatStreamFilter.noteError(err) end
+        end
+    end
+end
+
 function ChatStreamFilter.queueSeparate(frame, outputList, separate)
     if not frame or type(frame.AddMessage) ~= "function" then return end
+    if not (C_Timer and C_Timer.After) then return end
     local id = ChatStreamFilter.findLinkId(outputList)
     if not id then return end
-    local pending = frame.wctSeparatePending
+    -- A window opened since the last pass gets its hover handlers next frame.
+    if not hooked[frame] then ChatStreamFilter.queueBindAll() end
+    local pending = separatePendingByFrame[frame]
     if not pending then
-        pending = { values = {}, order = {} }
-        frame.wctSeparatePending = pending
-        
-        local function after(self, text, ...)
-            if not safeString(text) then return end
-            local lookupKey = ChatStreamFilter.findLinkId(text)
-            local meaning = lookupKey and pending.values[lookupKey]
-            if meaning then
-                pending.values[lookupKey] = nil
-                self:AddMessage(meaning, ...)
-            end
-        end
-        if hooksecurefunc then
-            hooksecurefunc(frame, "AddMessage", after)
-        end
+        pending = { list = {}, ids = {} }
+        separatePendingByFrame[frame] = pending
+        C_Timer.After(0, function() ChatStreamFilter.flushSeparate(frame) end)
     end
-    if not pending.values[id] then
-        pending.order[#pending.order + 1] = id
-        if #pending.order > 200 then
-            pending.values[table.remove(pending.order, 1)] = nil
-        end
-    end
-    pending.values[id] = separate
+    if pending.ids[id] or #pending.list >= SEPARATE_MAX then return end
+    pending.ids[id] = true
+    pending.list[#pending.list + 1] = { id = id, text = separate }
 end
 
 function ChatStreamFilter.handleChatMessageEvent(self, event, msg, author, ...)
@@ -265,6 +301,11 @@ function ChatStreamFilter.handleChatMessageEvent(self, event, msg, author, ...)
     return false, outputList, author, ...
 end
 
+-- Note on CHAT_MSG_BN_WHISPER: the client only calls message filters when
+-- every event argument is readable by addons. Battle.net whispers carry a
+-- secret sender, so this filter is normally skipped for them and those lines
+-- stay untranslated (no error, nothing rewritten). The registration is kept
+-- so translation works again whenever the arguments are readable.
 local EVENTS = {
     "CHAT_MSG_CHANNEL", "CHAT_MSG_SAY", "CHAT_MSG_YELL", "CHAT_MSG_EMOTE",
     "CHAT_MSG_GUILD", "CHAT_MSG_OFFICER", "CHAT_MSG_PARTY", "CHAT_MSG_PARTY_LEADER",
@@ -346,15 +387,32 @@ end
 -- after a reload, and the default click handler does not know those types, so
 -- on clients using addon links they are turned back into plain text in the
 -- chat history. Skipped silently when the chat frame cannot rewrite history.
+-- Without an AddMessage hook the history is checked when a window is first
+-- bound and a few times after login (when restored lines arrive). The history
+-- is only read first; it is rewritten only when an old link is really there.
 -----------------------------------------------------------------------------
 function ChatStreamFilter.stripLegacyLinks(text)
     return (text:gsub("|Hwctcopy:%d+|h(.-)|h", "%1"):gsub("|Hwct:%d+|h(.-)|h", "%1"))
 end
 
+function ChatStreamFilter.hasLegacyHistory(frame)
+    if type(frame.GetNumMessages) ~= "function" or type(frame.GetMessageInfo) ~= "function" then return false end
+    local count = frame:GetNumMessages()
+    if type(count) ~= "number" or hasSecret(count) then return false end
+    for index = 1, count do
+        local text = frame:GetMessageInfo(index)
+        if safeString(text) and ChatStreamFilter.hasLegacyLink(text) then return true end
+    end
+    return false
+end
+
 function ChatStreamFilter.sweepLegacyLinks(frame)
     if not frame then return end
-    frame.wctLegacySweepQueued = nil
+    legacySweepQueued[frame] = nil
     if type(frame.TransformMessages) ~= "function" then return end
+    local scanOk, found = pcall(ChatStreamFilter.hasLegacyHistory, frame)
+    if not scanOk then ChatStreamFilter.noteError(found) return end
+    if not found then return end
     local isCallOk, err = pcall(frame.TransformMessages, frame, function(entry)
         local message = type(entry) == "table" and entry.message
         return safeString(message) and ChatStreamFilter.hasLegacyLink(message) or false
@@ -368,8 +426,8 @@ function ChatStreamFilter.sweepLegacyLinks(frame)
 end
 
 function ChatStreamFilter.queueLegacySweep(frame)
-    if not frame or frame.wctLegacySweepQueued then return end
-    frame.wctLegacySweepQueued = true
+    if not frame or legacySweepQueued[frame] then return end
+    legacySweepQueued[frame] = true
     if C_Timer and C_Timer.After then
         C_Timer.After(0, function() ChatStreamFilter.sweepLegacyLinks(frame) end)
     else
@@ -377,9 +435,31 @@ function ChatStreamFilter.queueLegacySweep(frame)
     end
 end
 
-local hooked = {}
+-- Whisper windows are refilled by the client when reused, so only numbered
+-- windows are checked.
+function ChatStreamFilter.sweepAllLegacy()
+    if not useAddonLinks then return end
+    for frame in pairs(hooked) do
+        if not frame.isTemporary then ChatStreamFilter.queueLegacySweep(frame) end
+    end
+end
+
+-- Frames are bound (hover handlers only) once they are open; newly opened
+-- ones are picked up by queueBindAll from the event frame below.
+function ChatStreamFilter.isFrameOpen(frame)
+    if not frame then return false end
+    if frame.isTemporary then return frame.inUse == true end
+    local id = frame.GetID and frame:GetID()
+    if type(id) == "number" and id > 0 and type(FCF_IsChatWindowIndexActive) == "function" then
+        local isCallOk, active = pcall(FCF_IsChatWindowIndexActive, id)
+        if isCallOk then return active and true or false end
+    end
+    return frame.IsShown and frame:IsShown() or false
+end
+
 function ChatStreamFilter.bindFrame(frame)
     if not frame or hooked[frame] then return end
+    if not ChatStreamFilter.isFrameOpen(frame) then return end
     hooked[frame] = true
     frame:HookScript("OnHyperlinkEnter", function(self, link)
         if not safeString(link) then return end
@@ -397,12 +477,8 @@ function ChatStreamFilter.bindFrame(frame)
         if GameTooltip:GetOwner() == self then GameTooltip:Hide() end
         if ns.HidePlayerTooltip then ns.HidePlayerTooltip(self) end
     end)
-    if useAddonLinks and hooksecurefunc and type(frame.AddMessage) == "function" then
-        hooksecurefunc(frame, "AddMessage", function(self, text)
-            if safeString(text) and ChatStreamFilter.hasLegacyLink(text) then ChatStreamFilter.queueLegacySweep(self) end
-        end)
-        ChatStreamFilter.queueLegacySweep(frame)
-    end
+    -- No AddMessage hook on any chat frame (see "Separate Translation Line").
+    if useAddonLinks and not frame.isTemporary then ChatStreamFilter.queueLegacySweep(frame) end
 end
 
 function ChatStreamFilter.bindAllFrames()
@@ -411,6 +487,30 @@ function ChatStreamFilter.bindAllFrames()
         for _, displayName in ipairs(CHAT_FRAMES) do ChatStreamFilter.bindFrame(_G[displayName]) end
     end
 end
+
+local bindQueued = false
+function ChatStreamFilter.queueBindAll()
+    if bindQueued then return end
+    bindQueued = true
+    local function run()
+        bindQueued = false
+        local isCallOk, err = pcall(ChatStreamFilter.bindAllFrames)
+        if not isCallOk then ChatStreamFilter.noteError(err) end
+    end
+    if C_Timer and C_Timer.After then C_Timer.After(0, run) else run() end
+end
+
+-- Whisper windows and new chat windows are noticed through events on this
+-- addon's own frame (never by hooking the window-opening functions, which run
+-- in the middle of the default whisper handling), and bound on the next frame.
+local windowWatcher = CreateFrame("Frame")
+for _, eventName in ipairs({ "CHAT_MSG_WHISPER", "CHAT_MSG_WHISPER_INFORM", "CHAT_MSG_BN_WHISPER",
+        "CHAT_MSG_BN_WHISPER_INFORM", "UPDATE_CHAT_WINDOWS" }) do
+    pcall(windowWatcher.RegisterEvent, windowWatcher, eventName)
+end
+windowWatcher:SetScript("OnEvent", function()
+    if ChatStreamFilter.loggedIn then ChatStreamFilter.queueBindAll() end
+end)
 
 -----------------------------------------------------------------------------
 -- Open Copyable Chat Dialog
@@ -618,11 +718,12 @@ ns.OnLogin = function()
     ChatStreamFilter.registerFilters()
     local isCallOk, err = pcall(ChatStreamFilter.bindItemRef)
     if not isCallOk then ChatStreamFilter.noteError(err) end
+    ChatStreamFilter.loggedIn = true
     ChatStreamFilter.bindAllFrames()
-    if FCF_OpenTemporaryWindow then
-        hooksecurefunc("FCF_OpenTemporaryWindow", function()
-            ChatStreamFilter.bindAllFrames()
-        end)
+    -- Restored chat history can arrive a little after login.
+    if useAddonLinks and C_Timer and C_Timer.After then
+        C_Timer.After(5, ChatStreamFilter.sweepAllLegacy)
+        C_Timer.After(20, ChatStreamFilter.sweepAllLegacy)
     end
 end
 

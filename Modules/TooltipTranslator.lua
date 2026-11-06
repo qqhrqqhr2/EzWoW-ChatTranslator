@@ -454,12 +454,16 @@ function ns.IsTooltipSectionBoundary(text)
         or text == HEADER or text == "WoW Chat Translator"
 end
 
+-- Tooltips already translated since they were last cleared. Kept in a
+-- weak-keyed side table: fields written onto game tooltips would taint them.
+local translatedTooltips = setmetatable({}, { __mode = "k" })
+
 function TooltipTranslationHook.processIncomingEntry(tooltip)
     local savedDB = ns.db
     if not savedDB or not savedDB.tooltip or not savedDB.tooltip.enabled then return end
     local target = ns.ResolveTargetLanguageCode()
     if target == "en" then return end  
-    if tooltip.wctDone then return end
+    if translatedTooltips[tooltip] then return end
     
     if tooltip.GetUnit then
         local isCallOk, _, unit = pcall(tooltip.GetUnit, tooltip)
@@ -505,7 +509,7 @@ function TooltipTranslationHook.processIncomingEntry(tooltip)
         end
     end
     if #outputList == 0 then return end
-    tooltip.wctDone = true
+    translatedTooltips[tooltip] = true
     tooltip:AddLine(" ")
     tooltip:AddLine(HEADER, 0.478, 0.855, 0.831)
     for _, rowEntry in ipairs(outputList) do
@@ -535,7 +539,7 @@ local SETTERS = {
 function TooltipTranslationHook.bindTooltip(tt, useSetters)
     if not tt or hooked[tt] then return end
     hooked[tt] = true
-    tt:HookScript("OnTooltipCleared", function(self) self.wctDone = nil end)
+    tt:HookScript("OnTooltipCleared", function(self) translatedTooltips[self] = nil end)
     
     tt:HookScript("OnShow", function(self) pcall(TooltipTranslationHook.processIncomingEntry, self) end)
     if useSetters then
