@@ -248,9 +248,10 @@ function ns.ShowPlayerTooltip(owner, link, fromRefresh)
             -- unit names can be secret values (e.g. during encounters); never concatenate those
             titleStr:SetText("|cff7ADAD4EzWoW - Chat Translator|r\n" .. (nameText or name))
         else
-            tooltipObj:AddLine("EzWoW - Chat Translator", 0.478, 0.855, 0.831)
+            tooltipObj:AddDoubleLine(" ", "EzWoW - Chat Translator", 0, 0, 0, 0.5, 0.5, 0.5)
         end
         tooltipObj:Show()
+        if _G.EzWoWTooltipTagSizer and _G.EzWoWTooltipTagSizer.Refit then pcall(_G.EzWoWTooltipTagSizer.Refit, tooltipObj) end
         return
     end
     local apiInfo = lookupCache[buildPlayerCacheKey(name)] or {}
@@ -298,6 +299,7 @@ function ns.ShowPlayerTooltip(owner, link, fromRefresh)
         tooltipObj:AddLine(message, 0.6, 0.6, 0.6, true)
     end
     tooltipObj:Show()
+    if _G.EzWoWTooltipTagSizer and _G.EzWoWTooltipTagSizer.Refit then pcall(_G.EzWoWTooltipTagSizer.Refit, tooltipObj) end
 end
 function ns.HidePlayerTooltip(owner)
     if hoveredOwner == owner then hoveredOwner, hoveredLink = nil, nil end

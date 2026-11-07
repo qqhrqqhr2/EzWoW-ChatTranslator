@@ -3,6 +3,71 @@
 -- Modules/TooltipTranslator.lua : GameTooltip Bilingual Line & Title Translator
 --===========================================================================
 local ADDON, ns = ...
+
+-- The "EzWoW - ..." name line at the end of tooltip additions is drawn small.
+-- Shared by the EzWoW addons: the first one loaded sets it up.
+if not (_G.EzWoWTooltipTagSizer and _G.EzWoWTooltipTagSizer.version == 3) then
+    local sizer = {}
+    sizer.version = 3
+    _G.EzWoWTooltipTagSizer = sizer
+    local smallFont
+    local original = setmetatable({}, { __mode = "k" })   -- font string -> its own font object
+    local function tagFont()
+        if not smallFont and CreateFont then
+            smallFont = _G.EzWoWTooltipTagFont or CreateFont("EzWoWTooltipTagFont")
+            smallFont:CopyFontObject(GameTooltipTextSmall or GameTooltipText)
+            local path, _, flags = smallFont:GetFont()
+            if path then smallFont:SetFont(path, 8, flags) end
+        end
+        return smallFont
+    end
+    local function isTag(text)
+        if type(text) ~= "string" or (issecretvalue and issecretvalue(text)) then return false end
+        return text:find("^EzWoW %- ") ~= nil
+    end
+    local function fit(fs, tag)
+        if not fs then return end
+        if tag then
+            if not original[fs] then original[fs] = fs:GetFontObject() or GameTooltipText end
+            if tagFont() then fs:SetFontObject(smallFont) end
+            fs:SetTextColor(0.5, 0.5, 0.5)
+        elseif original[fs] then
+            fs:SetFontObject(original[fs])
+            original[fs] = nil
+        end
+    end
+    function sizer.Refit(tip)
+        local name = tip and tip.GetName and tip:GetName()
+        if type(name) ~= "string" then return end
+        local ok, count = pcall(tip.NumLines, tip)
+        if not ok or type(count) ~= "number" or (issecretvalue and issecretvalue(count)) then return end
+        for i = 1, count do
+            local right = _G[name .. "TextRight" .. i]
+            if right then fit(right, isTag(right:GetText())) end
+            -- line 1 is the tooltip's title: a left "EzWoW - ..." there stays big
+            local left = _G[name .. "TextLeft" .. i]
+            if left then fit(left, i > 1 and isTag(left:GetText())) end
+        end
+    end
+    local function restore(tip)
+        local name = tip and tip.GetName and tip:GetName()
+        if type(name) ~= "string" then return end
+        local rightPrefix, leftPrefix = name .. "TextRight", name .. "TextLeft"
+        for fs, font in pairs(original) do
+            local fsName = fs.GetName and fs:GetName()
+            if type(fsName) == "string" and (fsName:find(rightPrefix, 1, true) == 1 or fsName:find(leftPrefix, 1, true) == 1) then
+                fs:SetFontObject(font)
+                original[fs] = nil
+            end
+        end
+    end
+    for _, tip in ipairs({ GameTooltip, ItemRefTooltip, ShoppingTooltip1, ShoppingTooltip2 }) do
+        if tip then
+            pcall(hooksecurefunc, tip, "Show", function(self) pcall(sizer.Refit, self) end)
+            pcall(tip.HookScript, tip, "OnTooltipCleared", function(self) pcall(restore, self) end)
+        end
+    end
+end
 local type, pairs, ipairs, tonumber, tostring, select, pcall = type, pairs, ipairs, tonumber, tostring, select, pcall
 
 local TooltipTranslationHook = ns.TooltipTranslationHook or {}
@@ -511,7 +576,6 @@ function TooltipTranslationHook.processIncomingEntry(tooltip)
     if #outputList == 0 then return end
     translatedTooltips[tooltip] = true
     tooltip:AddLine(" ")
-    tooltip:AddLine(HEADER, 0.478, 0.855, 0.831)
     for _, rowEntry in ipairs(outputList) do
         if rowEntry.name then
             tooltip:AddLine(rowEntry.text, 1, 0.82, 0, true)
@@ -522,6 +586,8 @@ function TooltipTranslationHook.processIncomingEntry(tooltip)
             tooltip:AddLine(formatLocalizedLabel .. rowEntry.text, 0.62, 0.8, 0.62, true)
         end
     end
+    -- attribution line under this block; translatedTooltips (reset on OnTooltipCleared) keeps it to one per display
+    tooltip:AddDoubleLine(" ", HEADER, 0, 0, 0, 0.5, 0.5, 0.5)
     tooltip:Show()
 end
 

@@ -377,7 +377,9 @@ function ChatStreamFilter.presentGloss(owner, id)
             or (greenVal.cover < (activeCfg.minCover or 40) and "인식률이 표시 기준보다 낮음") or "풀이 표시 조건 충족"
         GameTooltip:AddLine(("현재 설정: 인식률 %d%% / 기준 %d%% · %s"):format(greenVal.cover, activeCfg.minCover or 40, reason), 0.655, 0.725, 0.773, true)
     end
+    GameTooltip:AddDoubleLine(" ", "EzWoW - Chat Translator", 0, 0, 0, 0.5, 0.5, 0.5)
     GameTooltip:Show()
+    if _G.EzWoWTooltipTagSizer and _G.EzWoWTooltipTagSizer.Refit then pcall(_G.EzWoWTooltipTagSizer.Refit, GameTooltip) end
 end
 
 -----------------------------------------------------------------------------
