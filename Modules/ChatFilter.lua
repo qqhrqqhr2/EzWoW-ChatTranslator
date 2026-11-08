@@ -66,6 +66,9 @@ end
 function ChatStreamFilter.cleanCodes(msg)
     msg = msg:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
     msg = msg:gsub("|T.-|t", ""):gsub("|A.-|a", "")
+    -- Protected text (|K...|k, e.g. names in bridged community chat) is
+    -- unreadable to addons: keep it out of detection and copy text.
+    msg = msg:gsub("|K.-|k", " "):gsub("|n", " ")
     return msg
 end
 
@@ -102,6 +105,7 @@ function ChatStreamFilter.injectClickableCopyLinks(msg, id)
         local rest = msg:sub(index)
         local code = rest:match("^|H.-|h.-|h") or rest:match("^|T.-|t")
             or rest:match("^|A.-|a") or rest:match("^|c%x%x%x%x%x%x%x%x") or rest:match("^|r")
+            or rest:match("^|K.-|k") or rest:match("^|n")
         if code then
             outputList[#outputList + 1] = code
             index = index + #code
@@ -781,6 +785,13 @@ end
 
 function ns.TestChat(text)
     local anchorTarget = function(s) DEFAULT_CHAT_FRAME:AddMessage("|cff7ADAD4[EzWoW - Chat Translator]|r " .. s:gsub("|", "||")) end
+    -- The edit box sends a typed "|" as "||"; undo it so codes can be tested.
+    text = text:gsub("||", "|")
+    -- Chat line as the filter would rewrite it, with codes shown raw.
+    local isCallOk, output = pcall(ChatStreamFilter.processIncomingEntry, text, "Tester", "CHAT_MSG_SAY")
+    anchorTarget("out=" .. tostring(isCallOk and output or ("error: " .. tostring(output))))
+    -- The same line rendered as a real chat line would be.
+    if isCallOk and type(output) == "string" then DEFAULT_CHAT_FRAME:AddMessage("|cff7ADAD4[EzWoW - Chat Translator]|r " .. output) end
     local lang = detectDominantScriptLang(ChatStreamFilter.detectText(text))
     if not lang then anchorTarget("언어를 감지하지 못했습니다.");return end
     local greenVal = translateTokenSequence(ChatStreamFilter.detectText(text), lang, ns.ResolveTargetLanguageCode())
