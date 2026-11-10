@@ -28,8 +28,10 @@
 ## X-License: MIT
 ## X-Website: https://github.com/qqhrqqhr2/EzWoW-ChatTranslator
 ## X-Curse-Project-ID: 1733319
-## SavedVariables: EzWoW_ChatTranslatorDB
+## SavedVariables: EzWoW_ChatTranslatorDB, EzWoW_SharedData
 
+Libs\EzWoWGamePad\GamePad.lua
+Libs\EzWoWShare\Share.lua
 Core\LocaleCore.lua
 Core\UIKit.lua
 Core\LocaleExtra.lua
