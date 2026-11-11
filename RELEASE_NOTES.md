@@ -1,9 +1,9 @@
-# v2.0.10
+# v2.0.11
 
 ### 한국어
-- 게임패드를 지원합니다. 패드로 EzWoW 창을 다루고, 보기(Create) 버튼으로 화면의 EzWoW 프레임으로 이동합니다.
-- EzWoW 애드온끼리 퀘스트·희귀 몬스터·드롭·채집 기록을 공유합니다(기본 켜짐, `/ezshare`).
+- 툴팁 표시 방식이 바뀐 EzWoW 툴팁 줄을 번역하지 않도록 맞췄습니다.
+- 번역이 원문과 같으면 번역을 다시 보여 주지 않습니다.
 
 ### English
-- Added gamepad support: EzWoW windows work with a gamepad, and View (Create) moves to the EzWoW frames on screen.
-- EzWoW addons now share quest, rare monster, drop and gathering records (on by default, `/ezshare`).
+- EzWoW Tooltip lines are no longer translated after their new look.
+- A translation that reads the same as the original line is no longer shown again.
