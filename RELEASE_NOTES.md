@@ -1,9 +1,7 @@
-# v2.0.11
+# v2.0.12
 
 ### 한국어
-- 툴팁 표시 방식이 바뀐 EzWoW 툴팁 줄을 번역하지 않도록 맞췄습니다.
-- 번역이 원문과 같으면 번역을 다시 보여 주지 않습니다.
+- 다른 EzWoW 사용자와 기록을 주고받는 공유 기능이 동작하지 않던 문제를 수정했습니다.
 
 ### English
-- EzWoW Tooltip lines are no longer translated after their new look.
-- A translation that reads the same as the original line is no longer shown again.
+- Fixed data sharing with other EzWoW users not working.
