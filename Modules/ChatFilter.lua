@@ -168,6 +168,11 @@ function ChatStreamFilter.processIncomingEntry(msg, author, event)
     if greenVal.foreignFound == 0 and (ns.SAME_SOURCE[targetKey] == lang or not savedDB.chat.langs[lang]) then return ChatStreamFilter.copyOnly(msg, author) end
     
     if ns.SAME_SOURCE[targetKey] == lang and (greenVal.foreignChars or 0) < 3 then return ChatStreamFilter.copyOnly(msg, author) end
+    -- a translation that reads the same as the line itself is not shown again
+    -- (a line in the reader's own language with words like "PvP" kept as they are)
+    local function squash(s) return (tostring(s or ""):gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", ""):gsub("[%s%p]", ""):lower()) end
+    local sameText = squash(greenVal.plain) == squash(clean)
+    if sameText and ns.SAME_SOURCE[targetKey] == lang then return ChatStreamFilter.copyOnly(msg, author) end
     if not savedDB.chat.langs[lang] or ns.SAME_SOURCE[targetKey] == lang then
         for _, sourceVal in ipairs({"en", "es", "ru", "zh", "ja", "ko"}) do
             if greenVal.languages[sourceVal] and savedDB.chat.langs[sourceVal] and ns.SAME_SOURCE[targetKey] ~= sourceVal then lang = sourceVal; break end
@@ -189,7 +194,7 @@ function ChatStreamFilter.processIncomingEntry(msg, author, event)
         tag = ("|cff%s%s[%s]|h|r "):format(TAG_COLOR[lang], ChatStreamFilter.linkCode(LINK_GLOSS, id), L.tag[lang])
     end
     local suffix, separate = "", nil
-    if savedDB.chat.inline and greenVal.found > 0 and greenVal.cover >= (savedDB.chat.minCover or 40) then
+    if not sameText and savedDB.chat.inline and greenVal.found > 0 and greenVal.cover >= (savedDB.chat.minCover or 40) then
         
         local hanSource = (lang == "zh" or lang == "ja" or greenVal.languages.zh or greenVal.languages.ja)
         local conflict = (hanSource and targetKey == "ko") or (lang == "ko" and (targetKey == "zhCN" or targetKey == "zhTW"))

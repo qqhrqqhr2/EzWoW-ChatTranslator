@@ -112,3 +112,9 @@ WoW Forever용 실시간 사전 번역 애드온입니다. 외국어 채팅에 �
 - `/ezct 미등록` · `/ezct 수집` · `/ezct 테스트 문장` · `/ezct 상태` · `/ezct 명령어`
 
 결과 언어: 한국어, English, Deutsch, Français, Español, Русский, 简体中文, 繁體中文, 日本語 (독일어·프랑스어는 번역표에 없는 부분을 영어로 보여 줍니다).
+
+---
+
+**Support:** If you find this addon useful, you can support its development. [Buy Me a Coffee ☕](https://buymeacoffee.com/qqhrqqhr2)
+
+**후원:** 애드온이 도움이 되셨다면 개발 후원으로 응원해 주세요. [Buy Me a Coffee ☕](https://buymeacoffee.com/qqhrqqhr2)

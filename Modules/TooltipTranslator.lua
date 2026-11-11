@@ -292,7 +292,7 @@ function TooltipTranslationHook.resolveEnglishWords(text)
     
     local low = text:lower()
     if low:find("id[%s:#]*%d") then return 0 end
-    if text:find("^■") or text:find("^◆") or text:find("^◇") then return 0 end
+    if text:find("^■") or text:find("^◆") or text:find("^◇") or text:find("|cff0001%x%x|r") then return 0 end
     local n = 0
     for boxWidth in text:gmatch("%a+") do
         if #boxWidth >= 2 then n = n + 1 end
@@ -513,7 +513,7 @@ function ns.IsTooltipSectionBoundary(text)
         or lower:match("^best gear finder") ~= nil or lower:match("^ezwow%s*%-") ~= nil or lower:match("^item%s*id") ~= nil
         or lower:find("item%s*id%s*#?%d") ~= nil or lower:find("spell%s*id%s*#?%d") ~= nil
         or lower:match("^아이템%s*id") ~= nil or lower:match("^주문%s*id") ~= nil
-        or text:find("^■") ~= nil or text:find("^◆") ~= nil or text:find("^◇") ~= nil
+        or text:find("^■") ~= nil or text:find("^◆") ~= nil or text:find("^◇") ~= nil or text:find("|cff0001%x%x|r") ~= nil
         or lower:match("^added with patch") ~= nil
         or lower:match("^icon%s*id") ~= nil or lower:match("^itemlevel") ~= nil
         or text == HEADER or text == "WoW Chat Translator"
