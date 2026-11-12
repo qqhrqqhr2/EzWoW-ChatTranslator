@@ -141,6 +141,14 @@ function ChatStreamFilter.injectClickableCopyLinks(msg, id)
     return table.concat(outputList)
 end
 
+-- letters of the reader's own script in UTF-8 (one match per letter)
+local OWN_SCRIPT = {
+    ko = "[\234-\237][\128-\191][\128-\191]",
+    zh = "[\228-\233][\128-\191][\128-\191]",
+    ja = "\227[\129-\131][\128-\191]",
+    ru = "[\208\209][\128-\191]",
+}
+
 local TAG_COLOR = { es = "ffbb88", ko = "a0e8a0", zh = "ffcc66", ja = "ff99cc", ru = "99ccff", en = "cccccc" }
 local myName
 
@@ -184,6 +192,15 @@ function ChatStreamFilter.processIncomingEntry(msg, author, event)
     if greenVal.foreignFound == 0 and (ns.SAME_SOURCE[targetKey] == lang or not savedDB.chat.langs[lang]) then return ChatStreamFilter.copyOnly(msg, author) end
     
     if ns.SAME_SOURCE[targetKey] == lang and (greenVal.foreignChars or 0) < 3 then return ChatStreamFilter.copyOnly(msg, author) end
+    -- a line mostly in the reader's own script with a few foreign words
+    -- ("체력 or 마나 or 기타"): written by someone who speaks it, left alone
+    if ns.SAME_SOURCE[targetKey] == lang then
+        local ownPattern = OWN_SCRIPT[lang]
+        if ownPattern then
+            local _, own = clean:gsub(ownPattern, "")
+            if own >= 2 * (greenVal.foreignChars or 0) then return ChatStreamFilter.copyOnly(msg, author) end
+        end
+    end
     -- a translation that reads the same as the line itself is not shown again
     -- (a line in the reader's own language with words like "PvP" kept as they are)
     local function squash(s) return (tostring(s or ""):gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", ""):gsub("[%s%p]", ""):lower()) end
