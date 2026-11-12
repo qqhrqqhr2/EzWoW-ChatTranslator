@@ -6678,4 +6678,7 @@ multiple=여러=multiple
 noise=소음=noise
 op=사기급(너무 셈)=overpowered
 makes=만든다=makes
+loktar=록타르(오크 함성)=Lok'tar
+loktar ogar=록타르 오가르(승리 아니면 죽음을!)=victory or death!
+wtg=잘했어=way to go
 ]=]

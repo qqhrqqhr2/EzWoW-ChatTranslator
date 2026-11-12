@@ -50,7 +50,8 @@ WoW Forever (`Interface: 16001`) · `/ezct`
 
 - **숫자·모집 표현 해석**: `30g`, `1.5k`, `lvl40`, `lf2m`, `8pm`, `4=1`(4명 있음, 1명 구함), 한/영 자판 실수, `invvvvv` 같은 늘어진 철자도 알아듣습니다.
 - **클릭해서 복사**: 번역하지 않는 메시지도 클릭하면 복사창이 열립니다(설정에서 끌 수 있음).
-- **미등록 표현 수집**: 사전에 없는 외국어 채팅 예문(`/ezct 미등록`)과 툴팁 미번역 문장(`/ezct 수집`)을 모아 복사창으로 보여 줍니다. 사전 보강에 쓸 수 있습니다.
+- **미등록 표현 수집**: 사전에 없는 외국어 채팅 예문(`/ezct 미등록`)과 툴팁 미번역 문장(`/ezct 수집`)을 모아 복사창으로 보여 줍니다. 한글이 들어간 글, 괄호 안 이름(길드·아이템), 자판 두드리기는 빼고 모읍니다.
+- **사전 키우기에 참여**: 표현이 20개 넘게 모이면 채팅창에 한 번 안내가 나옵니다. **[목록 복사]**를 눌러 Ctrl+C로 복사한 뒤 **[애드온 댓글 페이지]**(주소 복사)에 붙여 주시면 다음 업데이트 사전에 넣습니다. 다른 지역 서버의 채팅은 개발자에게 닿지 않아 이렇게 받습니다.
 - **나만의 단어장**: `/ezct add 단어=뜻`으로 길드 약어 등을 직접 등록하면 번역에 함께 쓰입니다.
 
 ### 설정창 (`/ezct`)
@@ -152,7 +153,8 @@ Chat Translator adds a **language tag and a rough meaning** to foreign-language 
 
 - **Numbers and LFG patterns**: understands `30g`, `1.5k`, `lvl40`, `lf2m`, `8pm`, `4=1` (have 4, need 1), Korean/English keyboard-layout mistakes and stretched spellings like `invvvvv`.
 - **Click to copy**: clicking any message, even one that is not translated, opens a copy box (can be turned off).
-- **Collecting unknown text**: foreign chat with no dictionary match (`/ezct unknown`) and untranslated tooltip lines (`/ezct collect`) are collected into a copy box, useful for extending the dictionary.
+- **Collecting unknown text**: foreign chat with no dictionary match (`/ezct unknown`) and untranslated tooltip lines (`/ezct collect`) are collected into a copy box. Lines in your own language, names in brackets (guilds, items) and keyboard mashing are left out.
+- **Help grow the dictionary**: once more than 20 expressions are collected, one chat line asks you to send them. Click **[Copy list]**, press Ctrl+C and paste it on the addon's comment page (**[the addon's comment page]** shows the address to copy). Chat on other regions' realms never reaches the developer, so this is how it gets in.
 - **Your own words**: `/ezct add word=meaning` registers guild slang etc. and uses it in translations.
 
 ### Settings window (`/ezct`)

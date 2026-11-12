@@ -30,6 +30,10 @@ local lineCache, lineOrder = {}, {}
 -- "wctcopy:<id>" = copy) are still recognized when clicked.
 -----------------------------------------------------------------------------
 local LINK_GLOSS, LINK_COPY = "gloss", "copy"
+-- the "copy list" link in the unknown-expressions notice (Modules/UnknownChat.lua)
+local LINK_UNKNOWN = "unknown"
+-- ... and the link that shows the addon's comment page address to copy
+local LINK_COMMENTS = "comments"
 local ADDON_LINK_HEAD = "addon:EzWoW-ChatTranslator:"
 local ADDON_LINK_PATTERN = "^addon:EzWoW%-ChatTranslator:(%a+):(%d+)"
 local useAddonLinks = type(EventRegistry) == "table" and type(EventRegistry.RegisterCallback) == "function"
@@ -40,6 +44,18 @@ function ChatStreamFilter.linkCode(action, id)
 end
 
 -- Returns action, numeric id, isLegacy for any link this addon has ever printed.
+-- a clickable chat link that opens the unknown-expressions copy box
+function ns.UnknownListLink(text)
+    if not useAddonLinks then return text end
+    return ChatStreamFilter.linkCode(LINK_UNKNOWN, 0) .. text .. "|h"
+end
+
+-- a clickable chat link that shows the addon's comment page address to copy
+function ns.CommentsPageLink(text)
+    if not useAddonLinks then return text end
+    return ChatStreamFilter.linkCode(LINK_COMMENTS, 0) .. text .. "|h"
+end
+
 function ChatStreamFilter.parseLink(link)
     if not safeString(link) then return nil end
     local action, id = link:match(ADDON_LINK_PATTERN)
@@ -480,6 +496,8 @@ function ChatStreamFilter.bindFrame(frame)
             if recordEntry and recordEntry.lang then ChatStreamFilter.presentGloss(self, id) end
         elseif action == LINK_GLOSS then
             if id then ChatStreamFilter.presentGloss(self, id) end
+        elseif action == LINK_UNKNOWN or action == LINK_COMMENTS then
+            return
         elseif ns.ShowPlayerTooltip and ns.db and ns.db.chat.playerTip ~= false then
             ns.ShowPlayerTooltip(self, link)
         end
@@ -527,7 +545,9 @@ end)
 -- Open Copyable Chat Dialog
 -----------------------------------------------------------------------------
 local copy
-function ns.OpenCopyableChatDialog(text, title)
+-- hint: an optional line under the title (what to do with the text)
+-- keepOpen: the box stays open after Ctrl+C (long lists to look through)
+function ns.OpenCopyableChatDialog(text, title, hint, keepOpen)
     if not copy then
         copy = CreateFrame("Frame", "EzWoWChatTranslatorCopy", UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
         copy:SetSize(540, 96)
@@ -548,26 +568,60 @@ function ns.OpenCopyableChatDialog(text, title)
         copy.title:SetPoint("TOP", 0, -18)
         copy.title:SetTextColor(0.478, 0.855, 0.831)
 
-        local inputBox = CreateFrame("EditBox", nil, copy, BackdropTemplateMixin and "BackdropTemplate" or nil)
-        inputBox:SetSize(480, 24)
-        inputBox:SetPoint("TOP", 0, -44)
+        copy.hint = copy:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        copy.hint:SetPoint("TOP", copy.title, "BOTTOM", 0, -6)
+        copy.hint:SetWidth(500)
+        copy.hint:SetTextColor(0.929, 0.957, 0.969)
+        copy.hint:Hide()
+
+        -- the text sits in a scroll area, so a long list (unknown expressions)
+        -- stays inside the window; the mouse wheel scrolls it
+        local box = CreateFrame("Frame", nil, copy, BackdropTemplateMixin and "BackdropTemplate" or nil)
+        box:SetSize(480, 24)
+        box:SetPoint("TOP", 0, -44)
+        if box.SetBackdrop then
+            ns.UIKit:ApplyBackdrop(box, 1, 1)
+            box:SetBackdropColor(0.047, 0.067, 0.086, 0.96)
+            box:SetBackdropBorderColor(0.204, 0.298, 0.357, 1.00)
+        end
+        copy.box = box
+        local scroll = CreateFrame("ScrollFrame", nil, box)
+        scroll:SetPoint("TOPLEFT", 1, -1)
+        scroll:SetPoint("BOTTOMRIGHT", -1, 1)
+        scroll:EnableMouseWheel(true)
+        scroll:SetScript("OnMouseWheel", function(self, delta)
+            local range = self:GetVerticalScrollRange() or 0
+            local value = math.max(0, math.min(range, (self:GetVerticalScroll() or 0) - delta * 40))
+            self:SetVerticalScroll(value)
+        end)
+        copy.scroll = scroll
+
+        local inputBox = CreateFrame("EditBox", nil, scroll)
+        inputBox:SetSize(478, 22)
         inputBox:SetFontObject(ChatFontNormal)
         inputBox:SetTextInsets(6, 6, 4, 4)
         inputBox:SetAutoFocus(false)
         inputBox:SetMaxLetters(0)
-        if inputBox.SetBackdrop then
-            ns.UIKit:ApplyBackdrop(inputBox, 1, 1)
-            inputBox:SetBackdropColor(0.047, 0.067, 0.086, 0.96)
-            inputBox:SetBackdropBorderColor(0.204, 0.298, 0.357, 1.00)
-        end
-        inputBox:SetScript("OnEditFocusGained", function(self)
-            if self.SetBackdropBorderColor then
-                self:SetBackdropBorderColor(0.478, 0.855, 0.831, 1.00)
+        scroll:SetScrollChild(inputBox)
+        -- keep the cursor in view while moving through the text
+        inputBox:SetScript("OnCursorChanged", function(self, _, y, _, h)
+            local top = -(y or 0)
+            local view = scroll:GetHeight() or 0
+            local current = scroll:GetVerticalScroll() or 0
+            if top < current then
+                scroll:SetVerticalScroll(top)
+            elseif top + (h or 0) > current + view then
+                scroll:SetVerticalScroll(math.min(scroll:GetVerticalScrollRange() or 0, top + (h or 0) - view))
             end
         end)
-        inputBox:SetScript("OnEditFocusLost", function(self)
-            if self.SetBackdropBorderColor then
-                self:SetBackdropBorderColor(0.204, 0.298, 0.357, 1.00)
+        inputBox:SetScript("OnEditFocusGained", function()
+            if box.SetBackdropBorderColor then
+                box:SetBackdropBorderColor(0.478, 0.855, 0.831, 1.00)
+            end
+        end)
+        inputBox:SetScript("OnEditFocusLost", function()
+            if box.SetBackdropBorderColor then
+                box:SetBackdropBorderColor(0.204, 0.298, 0.357, 1.00)
             end
         end)
         inputBox:SetScript("OnEscapePressed", function() copy:Hide() end)
@@ -579,9 +633,18 @@ function ns.OpenCopyableChatDialog(text, title)
                 self:HighlightText()
             end
         end)
+        -- Ctrl+C: the title says it was copied; a short copy box then closes,
+        -- one opened with keepOpen (the unknown-expressions list) stays
         inputBox:SetScript("OnKeyUp", function(self, lookupKey)
             if lookupKey == "C" and IsControlKeyDown() then
-                C_Timer.After(0.15, function() copy:Hide() end)
+                copy.title:SetText(L.copiedDone or "Copied!")
+                copy.title:SetTextColor(0.333, 1.0, 0.333)
+                if not copy.keepOpen then
+                    local shownText = copy.text
+                    C_Timer.After(0.8, function()
+                        if copy.text == shownText then copy:Hide() end
+                    end)
+                end
             end
         end)
         copy.eb = inputBox
@@ -615,12 +678,28 @@ function ns.OpenCopyableChatDialog(text, title)
         tinsert(UISpecialFrames, "EzWoWChatTranslatorCopy")
     end
     local multiline = text:find("\n", 1, true) ~= nil
-    copy:SetSize(540, multiline and 360 or 96)
+    local extra = 0
+    if type(hint) == "string" and hint ~= "" then
+        copy.hint:SetText(hint)
+        copy.hint:Show()
+        extra = 30
+    else
+        copy.hint:Hide()
+    end
+    copy:SetSize(540, (multiline and 360 or 96) + extra)
+    copy.box:ClearAllPoints()
+    copy.box:SetPoint("TOP", 0, -44 - extra)
+    copy.box:SetSize(480, multiline and 280 or 24)
     copy.eb:SetMultiLine(multiline)
-    copy.eb:SetSize(480, multiline and 280 or 24)
+    -- the edit box grows with its text inside the scroll area
+    copy.eb:SetSize(478, multiline and 278 or 22)
+    copy.scroll:SetVerticalScroll(0)
     copy.text = text
+    copy.keepOpen = keepOpen and true or false
     copy.title:SetText(title or L.copyTitle)
+    copy.title:SetTextColor(0.478, 0.855, 0.831)
     ns.UIKit:ElevateModal(copy, 260)
+    copy.box:SetFrameLevel(copy:GetFrameLevel() + 4)
     copy.eb:SetFrameLevel(copy:GetFrameLevel() + 5)
     copy:Show()
     if copy.Raise then copy:Raise() end
@@ -638,6 +717,14 @@ end
 function ChatStreamFilter.activateLink(link)
     local action, id = ChatStreamFilter.parseLink(link)
     if not action then return false end
+    if action == LINK_UNKNOWN then
+        if ns.ShowUnknownChat then ns.ShowUnknownChat() end
+        return true
+    end
+    if action == LINK_COMMENTS then
+        if ns.COMMENTS_URL then ns.OpenCopyableChatDialog(ns.COMMENTS_URL, L.commentsCopyTitle) end
+        return true
+    end
     local recordEntry = id and entryList[id]
     if recordEntry then ns.OpenCopyableChatDialog(recordEntry.text) end
     return true
