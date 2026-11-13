@@ -12,7 +12,7 @@ local inspectTip
 local queue, running = {}, false
 local PER_TICK = 8
 function LexiconBackgroundScanner.isFeatureEnabled()
-    return ns.db and ns.db.tooltip and ns.db.tooltip.collect
+    return ns.db and ns.db.tooltip and ns.db.tooltip.collect and not ns.LATIN_NON_EN_CLIENT
 end
 
 function LexiconBackgroundScanner.readable(v)

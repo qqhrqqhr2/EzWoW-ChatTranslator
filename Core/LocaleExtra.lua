@@ -16,6 +16,10 @@ if locale == "deDE" then ns.CLIENT_TARGET = "de"
 elseif locale == "frFR" then ns.CLIENT_TARGET = "fr"
 elseif locale == "esES" or locale == "esMX" then ns.CLIENT_TARGET = "es"
 elseif locale == "jaJP" then ns.CLIENT_TARGET = "ja" end
+-- clients whose own text uses Latin letters but is not English: their
+-- tooltips cannot be told apart from English ones
+local LATIN_CLIENT = { deDE = true, frFR = true, esES = true, esMX = true, itIT = true, ptBR = true, ptPT = true }
+ns.LATIN_NON_EN_CLIENT = LATIN_CLIENT[locale] or false
 ns.STR.de = {
  tipUse="Benutzen:", tipEquip="Anlegen:", tipProc="Trefferchance:", title="EzWoW - Chat Translator",
  secTooltip="Tooltip-Übersetzung", optTooltip="Englische Objekt- und Zauberbeschreibungen übersetzen",

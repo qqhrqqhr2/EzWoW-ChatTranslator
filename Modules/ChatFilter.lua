@@ -150,7 +150,55 @@ local OWN_SCRIPT = {
 }
 
 local TAG_COLOR = { es = "ffbb88", ko = "a0e8a0", zh = "ffcc66", ja = "ff99cc", ru = "99ccff", en = "cccccc" }
-local myName
+local myGUID, myNames
+
+-- the sender is "name surname" on this client; the GUID is checked first
+-- when the event has one
+local function isOwnSender(author, guid)
+    if type(guid) == "string" and not hasSecret(guid) and guid ~= "" then
+        if not myGUID then
+            local ok, g = pcall(UnitGUID, "player")
+            if ok and type(g) == "string" and not hasSecret(g) and g ~= "" then myGUID = g end
+        end
+        if myGUID then return guid == myGUID end
+    end
+    if not myNames then
+        local ok, first, second = pcall(UnitName, "player")
+        if not ok or type(first) ~= "string" or hasSecret(first) or first == "" then return false end
+        local names = { [first] = true }
+        if type(second) == "string" and not hasSecret(second) and second ~= "" and second ~= (GetRealmName and GetRealmName()) then
+            names[first .. " " .. second] = true
+        end
+        myNames = names
+    end
+    return myNames[author:match("^[^%-]+")] == true
+end
+
+-- common words of Latin-letter languages that are not English: a line with
+-- two of them (one in a line of up to three words) is in the reader's own
+-- language, not English to gloss
+local NATIVE_LATIN_WORDS = {
+    de = { und = true, ich = true, nicht = true, ist = true, der = true, das = true, ["für"] = true, auch = true, noch = true,
+        danke = true, bitte = true, suche = true, gruppe = true, wer = true, kann = true, jemand = true, ihr = true, wir = true,
+        ja = true, nein = true, bin = true, du = true, gleich = true, muss = true, kein = true, keine = true, bist = true,
+        habe = true, hab = true, mal = true, nochmal = true, gute = true, guten = true, hallo = true, gerne = true, genau = true,
+        komme = true, kommt = true, sind = true, schon = true, jetzt = true, mich = true, dich = true },
+    fr = { je = true, pas = true, les = true, des = true, avec = true, pour = true, merci = true, qui = true, une = true,
+        cherche = true, groupe = true, ["ça"] = true, ["très"] = true, vous = true, nous = true, quelqu = true,
+        oui = true, salut = true, tu = true, viens = true, bon = true, va = true, veux = true, peux = true, veut = true,
+        peut = true, suis = true, tout = true, mais = true, fait = true, bonjour = true, bonsoir = true },
+    es = { que = true, pero = true, voy = true, vamos = true, bien = true, ahora = true, gracias = true, todo = true, alguien = true,
+        tengo = true, estoy = true, eso = true, esta = true, ["está"] = true, aqui = true, ["aquí"] = true, nadie = true, hola = true,
+        muy = true, nada = true, tambien = true, ["también"] = true, porque = true, quien = true, puedo = true, grupo = true,
+        ["sí"] = true, ["qué"] = true, vale = true, dale = true, buenas = true, listo = true, eres = true, puedes = true,
+        tienes = true, quieres = true, necesito = true, busco = true, claro = true, bueno = true, vemos = true, jaja = true, mi = true, uno = true },
+}
+-- also an English misspelling of "queue": counts only toward two words
+local WEAK_LATIN_WORDS = { que = true }
+-- accented letters (not the × and ÷ signs) and the marks ¡ ¿ « »:
+-- common in these languages, almost never in English chat
+local NATIVE_LATIN_MARK = "\195[\128-\150\152-\182\184-\191]"
+local NATIVE_LATIN_SIGN = "\194[\161\171\187\191]"
 
 ns.status = { method = "none", seen = 0, tagged = 0, lastError = nil, filterEvents = 0 }
 
@@ -172,7 +220,7 @@ function ChatStreamFilter.copyOnly(msg, author)
     return ChatStreamFilter.injectClickableCopyLinks(msg, id)
 end
 
-function ChatStreamFilter.processIncomingEntry(msg, author, event)
+function ChatStreamFilter.processIncomingEntry(msg, author, event, guid)
     local savedDB = ns.db
     if not savedDB or not savedDB.chat.enabled or type(msg) ~= "string" or msg == "" then return nil end
     if ChatStreamFilter.hasOwnLink(msg) then return nil end
@@ -180,15 +228,37 @@ function ChatStreamFilter.processIncomingEntry(msg, author, event)
     if kind and savedDB.chat.channels and savedDB.chat.channels[kind] == false then return ChatStreamFilter.copyOnly(msg, author) end
     ns.status.seen = ns.status.seen + 1
     if savedDB.chat.skipSelf and type(author) == "string" and author ~= "" then
-        myName = myName or UnitName("player")
-        if author:match("^[^%-]+") == myName then return ChatStreamFilter.copyOnly(msg, author) end
+        if isOwnSender(author, guid) then return ChatStreamFilter.copyOnly(msg, author) end
     end
     local lang = detectDominantScriptLang(ChatStreamFilter.detectText(msg))
     if not lang then return ChatStreamFilter.copyOnly(msg, author) end
     local targetKey = ns.ResolveTargetLanguageCode()
+    local own = NATIVE_LATIN_WORDS[ns.SAME_SOURCE[targetKey]] or NATIVE_LATIN_WORDS[ns.CLIENT_TARGET]
+    -- a short French or German line ("tu") can match the Spanish glossary;
+    -- a line with a Spanish word of its own stays Spanish
+    local spanish = lang == "es" and own and own ~= NATIVE_LATIN_WORDS.es
+    if own and (lang == "en" or spanish) then
+        local text = ChatStreamFilter.detectText(msg)
+        if not spanish and (text:find(NATIVE_LATIN_MARK) or text:find(NATIVE_LATIN_SIGN)) then return ChatStreamFilter.copyOnly(msg, author) end
+        local hits, strong, words, esWords = 0, 0, 0, 0
+        for word in text:lower():gmatch("[%a\192-\244][%a\128-\244]*") do
+            words = words + 1
+            if own[word] then
+                hits = hits + 1
+                if not WEAK_LATIN_WORDS[word] then strong = strong + 1 end
+            end
+            if spanish and NATIVE_LATIN_WORDS.es[word] and not WEAK_LATIN_WORDS[word] then esWords = esWords + 1 end
+        end
+        if esWords == 0 and (hits >= 2 or (strong >= 1 and words <= 3)) then return ChatStreamFilter.copyOnly(msg, author) end
+    end
 
     local clean = ChatStreamFilter.detectText(msg):gsub("||", "|")
     local greenVal = translateTokenSequence(clean, lang, targetKey)
+    -- an "English" line these readers' glossary barely knows ("bonjour",
+    -- "alles klar") is their own language: no tag and no partial gloss
+    if own and lang == "en" and (greenVal.foreignFound == 0 or greenVal.cover < (savedDB.chat.minCover or 40)) then
+        return ChatStreamFilter.copyOnly(msg, author)
+    end
     if greenVal.foreignFound == 0 and (ns.SAME_SOURCE[targetKey] == lang or not savedDB.chat.langs[lang]) then return ChatStreamFilter.copyOnly(msg, author) end
     
     if ns.SAME_SOURCE[targetKey] == lang and (greenVal.foreignChars or 0) < 3 then return ChatStreamFilter.copyOnly(msg, author) end
@@ -318,7 +388,8 @@ function ChatStreamFilter.handleChatMessageEvent(self, event, msg, author, ...)
     
     if not safeString(msg) or hasSecret(author) or (author ~= nil and type(author) ~= "string") then return false end
     local lineID = select(9, ...)
-    
+    local senderGUID = select(10, ...)
+
     if hasSecret(lineID) or type(lineID) ~= "number" or lineID <= 0 then lineID = nil end
     local outputList, separate
     local activeCfg = ns.db and ns.db.chat
@@ -333,7 +404,7 @@ function ChatStreamFilter.handleChatMessageEvent(self, event, msg, author, ...)
     if cached and cached.msg == msg and cached.author == author and cached.event == event and cached.settings == settings then
         outputList, separate = cached[1], cached[2]
     else
-        local isCallOk, optionRef, sep = pcall(ChatStreamFilter.processIncomingEntry, msg, author, event)
+        local isCallOk, optionRef, sep = pcall(ChatStreamFilter.processIncomingEntry, msg, author, event, senderGUID)
         if not isCallOk then ChatStreamFilter.noteError(optionRef) optionRef, sep = nil, nil end
         outputList, separate = optionRef, sep
         ChatStreamFilter.cacheLine(lineID, { outputList, separate, msg = msg, author = author, event = event, settings = settings })

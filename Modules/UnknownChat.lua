@@ -80,10 +80,13 @@ end
 
 -- the list was first collected without the rules above: start it again once
 local UNKNOWN_LIST_VERSION = 2
+local LATIN_TARGET = { de = true, fr = true, es = true }
 
 function ns.RecordUnknownChat(text, lang, gloss)
     if not ns.db or not gloss.unknown or #gloss.unknown == 0 then return end
     if type(text) ~= "string" or UnknownTermLogger.writtenInOwnLanguage(text, lang) then return end
+    -- English and the reader's own Latin-letter language cannot be told apart
+    if lang == "en" and (ns.LATIN_NON_EN_CLIENT or LATIN_TARGET[ns.ResolveTargetLanguageCode()]) then return end
     local savedDB = ns.db.unknownChat
     if type(savedDB) ~= "table" or savedDB.v ~= UNKNOWN_LIST_VERSION then
         savedDB = { v = UNKNOWN_LIST_VERSION, words = {}, samples = {} }
@@ -218,6 +221,24 @@ end
 local prevLogin = ns.OnLogin
 ns.OnLogin = function()
     if prevLogin then pcall(prevLogin) end
+    -- older versions saved this client's own sentences and words as English: drop them once
+    if ns.LATIN_NON_EN_CLIENT and ns.db and not ns.db.latinCleanV1 then
+        ns.db.collected, ns.db.collectedCount = nil, nil
+        local u = ns.db.unknownChat
+        if type(u) == "table" then
+            if type(u.words) == "table" then
+                for k in pairs(u.words) do if type(k) == "string" and k:match("^en:") then u.words[k] = nil end end
+            end
+            if type(u.samples) == "table" then
+                for index = #u.samples, 1, -1 do
+                    local s = u.samples[index]
+                    if type(s) == "string" and s:match("^en: ") then table.remove(u.samples, index) end
+                end
+            end
+        end
+        ns.unknownCount = nil
+        ns.db.latinCleanV1 = true
+    end
     if C_Timer and C_Timer.After then
         C_Timer.After(15, function() pcall(UnknownTermLogger.noticeIfPending) end)
     end

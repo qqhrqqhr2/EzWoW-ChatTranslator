@@ -209,8 +209,14 @@ if hooksecurefunc then
 end
 function UnitHoverInspector.matches(unit, name)
     if not UnitExists(unit) or not UnitIsPlayer(unit) then return false end
-    local nodeEntry, realm = UnitName(unit)
-    return buildPlayerCacheKey(name) == buildPlayerCacheKey(nodeEntry) or (realm and realm ~= "" and buildPlayerCacheKey(name) == buildPlayerCacheKey(nodeEntry .. "-" .. realm))
+    local nodeEntry, second = UnitName(unit)
+    if type(nodeEntry) ~= "string" or UnitHoverInspector.hasSecret(nodeEntry) then return false end
+    local key = buildPlayerCacheKey(name)
+    if not key then return false end
+    if key == buildPlayerCacheKey(nodeEntry) then return true end
+    if type(second) ~= "string" or UnitHoverInspector.hasSecret(second) or second == "" then return false end
+    -- chat names carry the surname ("name surname"); "-" is the older realm form
+    return key == buildPlayerCacheKey(nodeEntry .. " " .. second) or key == buildPlayerCacheKey(nodeEntry .. "-" .. second)
 end
 function UnitHoverInspector.locateUnit(name)
     for _, unit in ipairs({"player", "target", "focus", "mouseover"}) do

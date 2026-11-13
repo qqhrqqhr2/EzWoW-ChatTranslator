@@ -539,7 +539,7 @@ function TooltipTranslationHook.processIncomingEntry(tooltip)
     local savedDB = ns.db
     if not savedDB or not savedDB.tooltip or not savedDB.tooltip.enabled then return end
     local target = ns.ResolveTargetLanguageCode()
-    if target == "en" then return end  
+    if target == "en" or ns.LATIN_NON_EN_CLIENT then return end
     if translatedTooltips[tooltip] then return end
     
     if tooltip.GetUnit then

@@ -28,7 +28,7 @@
 ## X-License: GPL-3.0
 ## X-Website: https://github.com/qqhrqqhr2/EzWoW-ChatTranslator
 ## X-Curse-Project-ID: 1733319
-## SavedVariables: EzWoW_ChatTranslatorDB, EzWoW_SharedData
+## SavedVariables: EzWoW_ChatTranslatorDB, EzWoW_SharedData, EzWoW_ShareStore_ChatTranslator
 
 Libs\EzWoWGamePad\GamePad.lua
 Libs\EzWoWShare\Share.lua
