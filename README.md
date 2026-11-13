@@ -23,11 +23,9 @@ WoW Forever (`Interface: 16001`) · `/ezct`
 
 ### 화면 미리보기
 
-![채팅 번역 화면](docs/images/ui_ko.png)
+![설정창](docs/images/ui_ko.png)
 
-![설정창](docs/images/settings_ko.png)
-
-> 이미지는 애드온 코드의 창 크기·좌표·색상·문구로 재현한 **예시 화면**입니다. 캐릭터 이름과 채팅 내용은 지어낸 예시입니다.
+> 실제 게임 화면입니다(WoW Forever, 한국어 클라이언트). 캐릭터 · 다른 플레이어 이름과 채팅 내용은 가렸습니다.
 
 ### 설치
 
@@ -35,7 +33,7 @@ WoW Forever (`Interface: 16001`) · `/ezct`
 2. 캐릭터 선택 화면의 **애드온** 목록에서 켭니다.
 3. 접속하면 바로 동작합니다. 설정은 `/ezct`, 미니맵 버튼 왼쪽 클릭, 또는 게임 설정의 **애드온 → EzWoW - Chat Translator**에서 엽니다.
 
-### 기능 상세 (위 그림의 번호)
+### 기능 상세
 
 | 번호 | 기능 | 설명 |
 |---|---|---|
@@ -126,11 +124,9 @@ Chat Translator adds a **language tag and a rough meaning** to foreign-language 
 
 ### Screenshots
 
-![Chat translation](docs/images/ui_en.png)
+![Settings window](docs/images/ui_en.png)
 
-![Settings window](docs/images/settings_en.png)
-
-> These are **mock-ups** rebuilt from the window sizes, coordinates, colours and strings in the addon code. Character names and chat lines are made up.
+> In-game screenshots (WoW Forever, Korean client). Character and player names and chat text are blurred.
 
 ### Installation
 
@@ -138,7 +134,7 @@ Chat Translator adds a **language tag and a rough meaning** to foreign-language 
 2. Enable it in the **AddOns** list on the character select screen.
 3. It works right after login. Open settings with `/ezct`, by left-clicking the minimap button, or from the game's **Options → AddOns → EzWoW - Chat Translator**.
 
-### Features (numbers in the picture)
+### Features
 
 | No. | Feature | Description |
 |---|---|---|

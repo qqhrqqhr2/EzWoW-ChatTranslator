@@ -9,11 +9,9 @@ CurseForge summary (KO): 외국어 채팅에 언어 태그와 대략적인 뜻�
 
 A real-time dictionary translator for WoW Forever. Foreign chat gets a language tag and a rough meaning, built from a dictionary of 23,116 WoW terms, slang and abbreviations inside the addon (no online translation). It also translates untranslated item and spell tooltips, converts your own messages into another language and shows character info on chat names.
 
-![Chat translation](https://raw.githubusercontent.com/qqhrqqhr2/EzWoW-ChatTranslator/master/docs/images/ui_en.png)
+![Settings window](https://raw.githubusercontent.com/qqhrqqhr2/EzWoW-ChatTranslator/master/docs/images/ui_en.png)
 
-![Settings window](https://raw.githubusercontent.com/qqhrqqhr2/EzWoW-ChatTranslator/master/docs/images/settings_en.png)
-
-*Mock-ups rebuilt from the window sizes, coordinates, colours and strings in the addon code. Character names and chat lines are made up.*
+*In-game screenshots (WoW Forever, Korean client). Character and player names and chat text are blurred.*
 
 ## Features
 
@@ -27,7 +25,7 @@ A real-time dictionary translator for WoW Forever. Foreign chat gets a language 
 
 ### Tooltip translation
 - Untranslated English item, spell, set-bonus and profession text is translated at the bottom of the tooltip: item name in gold, sentences in green, with a small grey `EzWoW - Chat Translator` label underneath.
-- Lines it cannot translate yet can be collected (`/ezct collect`).
+- Lines it cannot translate yet can be collected (`/ezct collect`), and foreign chat phrases missing from the dictionary too (`/ezct unknown`; lines in your own language, names in brackets and keyboard mashing are left out). The list scrolls and copies with Ctrl+C.
 
 ### Send in another language
 - `/ezct ko WTS 30g each` converts your text with the dictionary and puts it into the chat input box. Check it and press Enter. Parts it could not convert are listed in chat.
@@ -64,11 +62,9 @@ Result languages: 한국어, English, Deutsch, Français, Español, Русски
 
 WoW Forever용 실시간 사전 번역 애드온입니다. 외국어 채팅에 언어 태그와 대략적인 뜻을 붙여 주며, 애드온에 들어 있는 23,116개 와우 용어·은어·약어 사전으로 풀어 줍니다(인터넷 번역을 쓰지 않음). 번역이 없는 아이템·주문 툴팁 번역, 내 메시지를 외국어로 바꿔 보내기, 채팅 이름의 캐릭터 정보 툴팁도 있습니다.
 
-![채팅 번역 화면](https://raw.githubusercontent.com/qqhrqqhr2/EzWoW-ChatTranslator/master/docs/images/ui_ko.png)
+![설정창](https://raw.githubusercontent.com/qqhrqqhr2/EzWoW-ChatTranslator/master/docs/images/ui_ko.png)
 
-![설정창](https://raw.githubusercontent.com/qqhrqqhr2/EzWoW-ChatTranslator/master/docs/images/settings_ko.png)
-
-*애드온 코드의 창 크기·좌표·색상·문구로 재현한 예시 화면입니다. 캐릭터 이름과 채팅 내용은 지어낸 예시입니다.*
+*실제 게임 화면입니다(WoW Forever, 한국어 클라이언트). 캐릭터 · 다른 플레이어 이름과 채팅 내용은 가렸습니다.*
 
 ## 기능
 
@@ -82,7 +78,7 @@ WoW Forever용 실시간 사전 번역 애드온입니다. 외국어 채팅에 �
 
 ### 툴팁 번역
 - 번역이 없는 영어 아이템·주문·세트 효과·전문기술 문장을 툴팁 아래에 번역해 보여 줍니다. 아이템 이름은 금색, 문장은 초록색이고 맨 아래에 작은 회색 글씨로 `EzWoW - Chat Translator`가 붙습니다.
-- 아직 번역하지 못한 문장은 모아 둘 수 있습니다(`/ezct 수집`).
+- 아직 번역하지 못한 문장(`/ezct 수집`)과 사전에 없는 외국어 채팅 표현(`/ezct 미등록`)을 모아 둘 수 있습니다. 내 언어로 쓴 글, 괄호 안 이름, 자판 두드리기는 빼고 모으며, 목록은 스크롤되고 Ctrl+C로 복사합니다.
 
 ### 외국어로 보내기
 - `/ezct en 개당 30골드 팝니다`처럼 쓰면 사전으로 바꾼 문장이 채팅 입력창에 들어갑니다. 확인한 뒤 Enter로 보냅니다. 바꾸지 못한 부분은 채팅창에 알려 줍니다.

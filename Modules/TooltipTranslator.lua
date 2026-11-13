@@ -6,9 +6,9 @@ local ADDON, ns = ...
 
 -- The "EzWoW - ..." name line at the end of tooltip additions is drawn small.
 -- Shared by the EzWoW addons: the first one loaded sets it up.
-if not (_G.EzWoWTooltipTagSizer and _G.EzWoWTooltipTagSizer.version == 3) then
+if not (_G.EzWoWTooltipTagSizer and (tonumber(_G.EzWoWTooltipTagSizer.version) or 0) >= 4) then
     local sizer = {}
-    sizer.version = 3
+    sizer.version = 4
     _G.EzWoWTooltipTagSizer = sizer
     local smallFont
     local original = setmetatable({}, { __mode = "k" })   -- font string -> its own font object
@@ -25,14 +25,25 @@ if not (_G.EzWoWTooltipTagSizer and _G.EzWoWTooltipTagSizer.version == 3) then
         if type(text) ~= "string" or (issecretvalue and issecretvalue(text)) then return false end
         return text:find("^EzWoW %- ") ~= nil
     end
+    -- the size goes on the line itself too: a size another addon put on the
+    -- line (a font addon) would stay over the font object otherwise
+    local function setSize(fs, font)
+        if not (font and font.GetFont and fs.SetFont) then return end
+        local path, size, flags = font:GetFont()
+        if path and size then fs:SetFont(path, size, flags or "") end
+    end
     local function fit(fs, tag)
         if not fs then return end
         if tag then
             if not original[fs] then original[fs] = fs:GetFontObject() or GameTooltipText end
-            if tagFont() then fs:SetFontObject(smallFont) end
+            if tagFont() then
+                fs:SetFontObject(smallFont)
+                setSize(fs, smallFont)
+            end
             fs:SetTextColor(0.5, 0.5, 0.5)
         elseif original[fs] then
             fs:SetFontObject(original[fs])
+            setSize(fs, original[fs])
             original[fs] = nil
         end
     end
@@ -57,6 +68,7 @@ if not (_G.EzWoWTooltipTagSizer and _G.EzWoWTooltipTagSizer.version == 3) then
             local fsName = fs.GetName and fs:GetName()
             if type(fsName) == "string" and (fsName:find(rightPrefix, 1, true) == 1 or fsName:find(leftPrefix, 1, true) == 1) then
                 fs:SetFontObject(font)
+                setSize(fs, font)
                 original[fs] = nil
             end
         end
@@ -565,7 +577,8 @@ function TooltipTranslationHook.processIncomingEntry(tooltip)
                     pcall(TooltipTranslationHook.collectMatchingEntries, text)
                 end
             end
-        elseif isCallOk and TooltipTranslationHook.readable(text) and text ~= "" and text ~= HEADER then
+        elseif isCallOk and TooltipTranslationHook.readable(text) and text ~= "" and text ~= HEADER
+            and not TooltipTranslationHook.mostlyOwnScript(text) then
             local okc, itemCount = pcall(TooltipTranslationHook.resolveEnglishWords, text)
             if okc and itemCount > 0 then
                 local okt, rowEntry = pcall(TooltipTranslationHook.translateLine, text, target)
@@ -589,6 +602,14 @@ function TooltipTranslationHook.processIncomingEntry(tooltip)
     -- attribution line under this block; translatedTooltips (reset on OnTooltipCleared) keeps it to one per display
     tooltip:AddDoubleLine(" ", HEADER, 0, 0, 0, 0.5, 0.5, 0.5)
     tooltip:Show()
+end
+
+-- a line written in the client's own letters with a few English words in it
+-- ("<Shift click to share the pin>" in Korean) is not a line to explain
+function TooltipTranslationHook.mostlyOwnScript(text)
+    local latin = select(2, text:gsub("%a", ""))
+    local wide = select(2, text:gsub("[\194-\244][\128-\191]*", ""))
+    return wide > 0 and wide >= latin
 end
 
 local hooked = {}
