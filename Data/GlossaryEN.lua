@@ -6681,4 +6681,82 @@ makes=만든다=makes
 loktar=록타르(오크 함성)=Lok'tar
 loktar ogar=록타르 오가르(승리 아니면 죽음을!)=victory or death!
 wtg=잘했어=way to go
+lord=군주=lord
+summoners=소환해 줄 사람=summoner
+darlan=달라란=Dalaran
+cityofdalaran=달라란=Dalaran
+shit=젠장=damn
+oh shit=이런=oh no
+shit happens=그럴 수도 있지=it happens
+stonard=스토나드=Stonard
+kargath=카르가스=Kargath
+casters=시전자=caster
+beer=맥주=beer
+beers=맥주=beer
+beerss=맥주=beer
+drinking beers=맥주 마시는 중=drinking beer
+drinkingbeers=맥주 마시는 중=drinking beer
+cus=왜냐면=because
+damp=축축한=damp
+black fathom=검은심연 나락=Blackfathom Deeps
+nose=코=nose
+oce=오세아니아=Oceania
+reasonable=적당한=reasonable
+scars=흉터=scars
+abdundantly=충분히=abundantly
+abundantly=충분히=abundantly
+abuse=악용=abuse
+academy=아카데미=academy
+additional=추가=additional
+no additional recruitment=추가 모집 없음=no more recruiting
+attempt=시도=attempt
+attempts=시도=attempts
+attemots=시도=attempts
+australian=호주 사람=Australian
+aware=알고 있는=aware
+ay=어이=hey
+baseicly=기본적으로=basically
+basically=기본적으로=basically
+beat=이기다=beat
+beat his ass=혼쭐을 내다=beat him up
+bosnian=보스니아=Bosnian
+btws=그런데=by the way
+bullshit=헛소리=nonsense
+butwhat=그런데 뭐=but what
+candles=양초=candles
+catch=잡다=catch
+checkmylogs=내 로그 확인해=check my logs
+check my logs=내 로그 확인해=check my logs
+cheer=응원=cheer
+choosing=고르는 중=choosing
+comes=온다=comes
+comfortable=편한=comfortable
+completely=완전히=completely
+crew=팀=crew
+curiosity=호기심=curiosity
+darts=다트=darts
+dealer=판매상=dealer
+digging=파는 중=digging
+dropded=드랍됨=dropped
+eh=음=um
+err=음=um
+eta=도착 예정=ETA
+fella=친구=fellow
+ffarmign=파밍 중=farming
+fortget=잊다=forget
+fuckin=빌어먹을=damn
+fucking=빌어먹을=damn
+generation=세대=generation
+gmt=그리니치 표준시=GMT
+grabbing=잡는 중=grabbing
+graves=무덤=graves
+grouo=파티=group
+gtfo=꺼져=get out
+happens=일어나다=happens
+hardcore=하드코어=hardcore
+hats=모자=hats
+havee=가지다=have
+hectic=정신없는=hectic
+money laundering=돈세탁=money laundering
+
 ]=]

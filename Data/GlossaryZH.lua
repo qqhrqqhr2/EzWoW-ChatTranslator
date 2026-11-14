@@ -3519,4 +3519,9 @@ R点=주사위 굴리기=roll
 已备齐=다 준비됨=all set
 确定=확실해=sure
 均可=다 괜찮아요=either is fine
+乐趣=재미=fun
+享受=즐기다=enjoy
+澳洲=호주=Australia
+轻松=편하게=relaxed
+
 ]=]
