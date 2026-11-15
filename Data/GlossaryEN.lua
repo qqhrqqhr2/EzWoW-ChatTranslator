@@ -6758,5 +6758,47 @@ hats=모자=hats
 havee=가지다=have
 hectic=정신없는=hectic
 money laundering=돈세탁=money laundering
+tp=순간이동=teleport
+whisp=귓말=whisper
+whisp me=귓말 주세요=whisper me
+slot=자리=slot
+slots=자리=slot
+slain=처치=slain
+claim=찜=claim
+prices=가격=price
+proc=발동=proc
+procs=발동=proc
+ranks=계급=rank
+recon=정찰=recon
+scout=정찰병=scout
+scouts=정찰병=scout
+squad=분대=squad
+welcomed=환영=welcome
+plains=평원=plains
+clearing=소탕=clearing
+deadly=치명적인=deadly
+deadly blunderbuss=정교한 나팔총=Deadly Blunderbuss
+blunderbuss=나팔총=blunderbuss
+goal=목표=goal
+greater=상급=greater
+minor=최하급=minor
+impact=충격=impact
+planned=계획됨=planned
+bolster=보강=bolster
+creating=만드는 중=creating
+revelation=계시=revelation
+appriciated=감사합니다=appreciated
+araiding=공대 진행=raiding
+ogri=오그리마=Orgrimmar
+ogrimar=오그리마=Orgrimmar
+sexy=섹시=sexy
+1 slot left=1명 더 구함=looking for 1 more
+1 slots left=1명 더 구함=looking for 1 more
+2 slot left=2명 더 구함=looking for 2 more
+2 slots left=2명 더 구함=looking for 2 more
+3 slot left=3명 더 구함=looking for 3 more
+3 slots left=3명 더 구함=looking for 3 more
+4 slot left=4명 더 구함=looking for 4 more
+4 slots left=4명 더 구함=looking for 4 more
 
 ]=]
