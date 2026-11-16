@@ -1,11 +1,13 @@
-# v2.0.20
+# v2.0.21
 
 ### 한국어
-- 데이터 공유 방식을 새로 바꿨습니다. 같은 기록을 되풀이해 보내지 않고 상대에게 없는 기록만 주고받아, 공유로 오가는 메시지가 크게 줄었습니다. 예전 버전을 쓰는 사람과도 계속 공유됩니다.
-- 공유 기록의 확인 대기 공간에 남아 있던 이미 확인된 기록을 정리해 저장 데이터가 줄었습니다.
-- /ezshare 창의 사람 탭에서 상대가 쓰는 공유 버전과 EzWoW 애드온 버전을 볼 수 있습니다.
+- 독일어·프랑스어로 쓴 채팅도 알아듣고 대략적인 뜻을 붙입니다(설정의 "번역할 언어"에 독일어·프랑스어 추가).
+- 독일어·프랑스어 결과 번역표를 다른 언어만큼 늘렸습니다(각 1,110개 → 3,917개). 직업·주문·지역·던전·보스는 게임 공식 이름을 씁니다.
+- 사용자들이 보내 준 모르는 단어 목록에서 채팅 용어와 자주 틀리는 철자 95개를 사전에 추가했습니다.
+- `/ezshare` 창 "종류별" 탭에서 다른 사용자에게 받아 지금 쓰고 있는 기록 수와 보이는 곳을 볼 수 있습니다.
 
 ### English
-- Data sharing works in a new way: records are no longer sent again and again, only what the other player does not have yet, so far fewer sharing messages go around. Sharing with players on older versions continues.
-- Records already confirmed are cleared from the shared-data waiting list, so the saved data is smaller.
-- The Players tab of the /ezshare window shows each player's sharing version and EzWoW addon versions.
+- German and French chat is now recognised and glossed too ("Languages to translate" in the settings now has German and French).
+- German and French result tables are now as large as the other languages (1,110 → 3,917 entries each), using the game's official names for classes, spells, zones, dungeons and bosses.
+- Added 95 chat terms and common misspellings from the unknown-word lists users sent.
+- The /ezshare "By kind" tab now shows how many records from other players are in use and where they show.
