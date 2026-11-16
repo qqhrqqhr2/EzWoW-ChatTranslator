@@ -1,4 +1,4 @@
--- WoW Chat Translator: 번체 → 간체 글자 대응표 (자동 생성, OpenCC t2s)
+-- WoW Chat Translator: 번체 → 간체 글자 대응표 (자동 생성)
 -- 사전 찾기에서만 쓴다. 번체로 쓴 중국어 채팅도 간체 사전으로 찾을 수 있게 한다.
 local ADDON, ns = ...
 local T = {}

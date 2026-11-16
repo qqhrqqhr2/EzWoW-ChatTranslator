@@ -15,10 +15,10 @@ WoW Forever (`Interface: 16001`) · `/ezct`
 
 ### 개요
 
-외국어 채팅 앞뒤에 **언어 태그와 대략적인 뜻**을 바로 붙여 주는 실시간 사전 번역 애드온입니다. 인터넷 번역을 쓰지 않고, 애드온에 들어 있는 **23,116개 와우 용어·은어·약어 사전**(던전, 직업, 아이템, 모집·거래 표현 등)으로 단어 단위로 풀어 줍니다. 번역이 빠진 아이템·주문 툴팁도 풀어 주고, 내 문장을 외국어로 바꿔 보내는 기능과 채팅 이름의 캐릭터 정보 툴팁도 있습니다.
+외국어 채팅 앞뒤에 **언어 태그와 대략적인 뜻**을 바로 붙여 주는 실시간 사전 번역 애드온입니다. 인터넷 번역을 쓰지 않고, 애드온에 들어 있는 **30,521개 와우 용어·은어·약어 사전**(던전, 직업, 아이템, 모집·거래 표현 등)으로 단어 단위로 풀어 줍니다. 번역이 빠진 아이템·주문 툴팁도 풀어 주고, 내 문장을 외국어로 바꿔 보내는 기능과 채팅 이름의 캐릭터 정보 툴팁도 있습니다.
 
 - 결과 언어: 한국어, English, Deutsch, Français, Español, Русский, 简体中文, 繁體中文, 日本語 (+ 자동)
-- 원문 언어: 한국어, 영어, 중국어, 일본어, 러시아어, 스페인어
+- 원문 언어: 한국어, 영어, 중국어, 일본어, 러시아어, 스페인어, 독일어, 프랑스어
 - 사전 번역이라 문장 전체를 매끄럽게 번역하지는 않습니다. **“무슨 뜻인지 감을 잡는” 용도**로 쓰세요.
 
 ### 화면 미리보기
@@ -65,7 +65,7 @@ WoW Forever (`Interface: 16001`) · `/ezct`
 | ② | | 내가 보낸 메시지는 제외 | 켬 |
 | ② | | 모든 메시지 클릭해서 복사 (번역 안 하는 메시지 포함) | 켬 |
 | ② | | 채팅 이름에 캐릭터 정보 툴팁 (Shift+클릭 조회) | 켬 |
-| ③ | 번역할 언어 | 한국어·중국어·일본어·러시아어·영어·스페인어 원문을 각각 켜고 끕니다. **현지 언어와 같은 언어는 자동으로 꺼지고 회색**이 됩니다. | 모두 켬 |
+| ③ | 번역할 언어 | 한국어·중국어·일본어·러시아어·영어·스페인어·독일어·프랑스어 원문을 각각 켜고 끕니다. **현지 언어와 같은 언어는 자동으로 꺼지고 회색**이 됩니다. | 모두 켬 |
 | ④ | 번역할 채널 | 공개 채널(거래·파티찾기·공용), 일반 대화·외치기, 길드·관리자, 파티·공격대·인스턴스, 귓속말 | 모두 켬 |
 | ⑤ | 툴팁 번역 | 아이템·주문 툴팁의 영어 문장 번역 / 번역 못 한 문장 모으기 | 켬 / 켬 |
 | ⑤ | 기타 | 미니맵 버튼 표시 | 켬 |
@@ -98,7 +98,7 @@ WoW Forever (`Interface: 16001`) · `/ezct`
 - 설정 변경은 **새로 들어오는 메시지부터** 적용됩니다.
 - 따로 떨어진 뜻 줄(`↳`)은 원래 메시지가 실제로 표시된 채팅창에만 나옵니다.
 - 배틀넷 귓속말은 게임이 보낸 사람 정보를 애드온에 공개하지 않아 번역하지 않습니다.
-- 독일어·프랑스어는 결과 언어로는 지원되지만 번역표가 작아(각 965개) 부족한 부분은 영어로 나옵니다.
+- 독일어·프랑스어로 쓴 채팅도 알아듣습니다(각 3,500여 개 표현). 독일어·프랑스어 결과 번역표도 다른 언어와 같은 크기(각 3,900여 개)이고, 표에 없는 말은 영어로 나옵니다.
 
 <!-- ezwow-pad-share -->
 ### 게임패드
@@ -117,10 +117,10 @@ WoW Forever (`Interface: 16001`) · `/ezct`
 
 ### Overview
 
-Chat Translator adds a **language tag and a rough meaning** to foreign-language chat in real time. It does not use an online translation service: it breaks messages down with a built-in **dictionary of 23,116 WoW terms, slang and abbreviations** (dungeons, classes, items, LFG/trade phrases…). It also translates untranslated item/spell tooltips, converts your own message into another language and shows character info on chat names.
+Chat Translator adds a **language tag and a rough meaning** to foreign-language chat in real time. It does not use an online translation service: it breaks messages down with a built-in **dictionary of 30,521 WoW terms, slang and abbreviations** (dungeons, classes, items, LFG/trade phrases…). It also translates untranslated item/spell tooltips, converts your own message into another language and shows character info on chat names.
 
 - Result languages: 한국어, English, Deutsch, Français, Español, Русский, 简体中文, 繁體中文, 日本語 (+ Auto)
-- Source languages: Korean, English, Chinese, Japanese, Russian, Spanish
+- Source languages: Korean, English, Chinese, Japanese, Russian, Spanish, German, French
 - It is a dictionary translator, not a fluent sentence translator. Use it to **get the gist**.
 
 ### Screenshots
@@ -167,7 +167,7 @@ Chat Translator adds a **language tag and a rough meaning** to foreign-language 
 | ② | | Skip my own messages | On |
 | ② | | Click any message to copy it (even untranslated) | On |
 | ② | | Character info on chat names (Shift-click) | On |
-| ③ | Languages to translate | Korean, Chinese, Japanese, Russian, English, Spanish sources individually. **The language equal to your local language is turned off and greyed out.** | All on |
+| ③ | Languages to translate | Korean, Chinese, Japanese, Russian, English, Spanish, German, French sources individually. **The language equal to your local language is turned off and greyed out.** | All on |
 | ④ | Channels to translate | Public (Trade, LFG, General), say/yell, guild/officer, party/raid/instance, whispers | All on |
 | ⑤ | Tooltip translation | Translate English text in item and spell tooltips / Collect untranslated sentences | On / On |
 | ⑤ | Other | Show minimap button | On |
@@ -200,7 +200,7 @@ Chat Translator adds a **language tag and a rough meaning** to foreign-language 
 - Setting changes apply **to new messages**.
 - A separate meaning line (`↳`) only appears in the chat window that actually shows the original message.
 - Battle.net whispers are not translated, because the game does not give addons their sender.
-- German and French work as result languages, but their tables are small (965 entries each); missing parts fall back to English.
+- German and French chat is understood too (about 3,500 phrases each). The German and French result tables are as large as the others (about 3,900 entries each); anything not in them shows in English.
 
 ### Gamepad
 - With the gamepad UI on, EzWoW windows work with a gamepad: D-pad to move, A (✕) to press, X (□) for right-click, LB/RB to scroll, B (○) to close. A key guide in your pad's button style shows under the window.

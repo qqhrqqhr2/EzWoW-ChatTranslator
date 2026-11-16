@@ -288,7 +288,7 @@ function SettingsDialog.constructMainFrame()
 
     y = -72
     SettingsDialog.createSectionHeaderLabel(containerFrame, "secLangs", RIGHT, y); y = y - 26
-    for index, langCode in ipairs({ "ko", "zh", "ja", "ru", "en", "es" }) do
+    for index, langCode in ipairs({ "ko", "zh", "ja", "ru", "en", "es", "de", "fr" }) do
         local checkWidget = SettingsDialog.check(containerFrame, function() return L.langName[langCode] end,
             RIGHT + ((index - 1) % 2) * HALF, y - math.floor((index - 1) / 2) * ROW,
             function() return savedDB.chat.langs[langCode] end,
@@ -296,7 +296,7 @@ function SettingsDialog.constructMainFrame()
         checkWidget.lang = langCode
         langChecks[#langChecks + 1] = checkWidget
     end
-    y = y - 3 * ROW - 8
+    y = y - 4 * ROW - 8
 
     SettingsDialog.createSectionHeaderLabel(containerFrame, "secChannels", RIGHT, y); y = y - 26
     for _, kind in ipairs({ "public", "say", "guild", "group", "whisper" }) do

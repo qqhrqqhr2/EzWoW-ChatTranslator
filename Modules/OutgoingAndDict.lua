@@ -199,7 +199,7 @@ end
 -----------------------------------------------------------------------------
 -- Search Dictionary
 -----------------------------------------------------------------------------
-local SEARCH_LANG_ORDER = { "en", "ko", "zh", "ru", "ja", "es" }
+local SEARCH_LANG_ORDER = { "en", "ko", "zh", "ru", "ja", "es", "de", "fr" }
 
 function ns.SearchDictionary(query)
     query = OutgoingChatComposer.trim(query or "")

@@ -214,6 +214,48 @@ local SPANISH_MARKER_WORDS = {para=true,quiero=true,con=true,por=true,favor=true
 local SPANISH_STRONG_WORDS = {buscas=true,busques=true,prepararte=true,lanzamiento=true,recluta=true,latinos=true,unite=true,preparate=true,busco=true,buscamos=true,vendo=true,compro=true,necesito=true,necesitamos=true,puedes=true,tienes=true,tenemos=true,quiero=true,queremos=true,invitarme=true,["invítame"]=true,sanador=true,sanadores=true,tanque=true,mazmorra=true,hermandad=true,gracias=true,hola=true}
 local SPANISH_MARKER_WORDS = {para=true,quiero=true,con=true,por=true,favor=true,grupo=true,["misión"]=true,misiones=true,["maná"]=true,["raíz"]=true,terrenal=true,alguien=true,puedo=true}
 
+-- German and French: "strong" words almost never appear in English or Spanish chat
+-- (2 points each), marker words are common there but appear elsewhere too (1 point),
+-- and letters only that language uses count 2 points once. Two points decide it.
+-- A word counts once however often it repeats, and words English chat uses
+-- too (im = I'm, est, et, mon, au) are not markers.
+local GERMAN_STRONG_WORDS = {ich=true,nicht=true,und=true,auch=true,noch=true,schon=true,jetzt=true,bitte=true,danke=true,
+    suche=true,suchen=true,brauche=true,brauchen=true,jemand=true,gruppe=true,heiler=true,kein=true,keine=true,wir=true,
+    ihr=true,bist=true,habe=true,hab=true,gerne=true,genau=true,nochmal=true,mich=true,dich=true,sind=true,kann=true,
+    ["könnt"]=true,["möchte"]=true,["für"]=true,["über"]=true,gleich=true,muss=true,komme=true,kommt=true,ist=true,
+    oder=true,aber=true,dann=true,nein=true,leute=true,gilde=true,schlachtzug=true,hallo=true,guten=true,sucht=true,
+    kurz=true,wieder=true,vielleicht=true,warum=true,weil=true,bisschen=true,einen=true,einem=true,einer=true,nur=true}
+local GERMAN_MARKER_WORDS = {der=true,das=true,ein=true,eine=true,mit=true,zu=true,auf=true,bin=true,gut=true,mal=true,
+    wie=true,wer=true,ja=true,dem=true,wo=true,heute=true}
+local FRENCH_STRONG_WORDS = {je=true,pas=true,avec=true,merci=true,cherche=true,cherchons=true,groupe=true,["ça"]=true,
+    ["très"]=true,vous=true,nous=true,oui=true,salut=true,viens=true,veux=true,peux=true,veut=true,peut=true,suis=true,
+    mais=true,bonjour=true,bonsoir=true,aussi=true,donc=true,quoi=true,besoin=true,soigneur=true,donjon=true,guilde=true,
+    dans=true,une=true,["déjà"]=true,["être"]=true,faut=true,["j'ai"]=true,["c'est"]=true,["qu'un"]=true,["quelqu'un"]=true,
+    cette=true,beaucoup=true,toujours=true,rien=true,votre=true,notre=true,leur=true,sommes=true,["êtes"]=true,avez=true,avons=true}
+local FRENCH_MARKER_WORDS = {les=true,des=true,qui=true,bon=true,va=true,du=true,
+    ma=true,il=true,pour=true,tout=true,fait=true,ce=true}
+local GERMAN_LETTERS = "\195[\164\182\188\159\132\150\156]"                 -- ä ö ü ß Ä Ö Ü
+local FRENCH_LETTERS = "\195[\168\170\160\167\185\162\174\180\187\171\175]" -- è ê à ç ù â î ô û ë ï
+
+local function latinNeighbourLang(text, tokens)
+    local de, fr = 0, 0
+    local seen = {}
+    for _, token in ipairs(tokens) do
+        local key = token.key
+        if key and not seen[key] then
+            seen[key] = true
+            if GERMAN_STRONG_WORDS[key] then de = de + 2 elseif GERMAN_MARKER_WORDS[key] then de = de + 1 end
+            if FRENCH_STRONG_WORDS[key] then fr = fr + 2 elseif FRENCH_MARKER_WORDS[key] then fr = fr + 1 end
+        end
+    end
+    local lower = text:lower()
+    if lower:find(GERMAN_LETTERS) then de = de + 2 end
+    if lower:find(FRENCH_LETTERS) then fr = fr + 2 end
+    if de >= 2 and de > fr then return "de" end
+    if fr >= 2 and fr > de then return "fr" end
+    return nil
+end
+
 function TranslationEngine.detectDominantScriptLang(text)
     local han, kana, hangul, cyr, lat = 0, 0, 0, 0, 0
     local i, nodeEntry = 1, #text
@@ -238,12 +280,29 @@ function TranslationEngine.detectDominantScriptLang(text)
     if cyr > 0 then return "ru" end
     if lat >= 2 and hangul == 0 then
         local lookupKey = TranslationEngine.resolveNormKey(text)
-        if activeLanguageDict.es and activeLanguageDict.es[lookupKey] and not activeLanguageDict.en[lookupKey] then return "es" end
+        local english = activeLanguageDict.en or {}
+        -- the whole line is a Spanish phrase (and not English)
+        if activeLanguageDict.es and activeLanguageDict.es[lookupKey] and not english[lookupKey] then return "es" end
+        -- or a German or French one: two words or more, or with letters only that
+        -- language uses (single English-looking words stay English: regen, gift, route)
+        local lower = text:lower()
+        local several = lookupKey:find("%s") ~= nil
+        local onlyIn
+        for _, code in ipairs({ "de", "fr" }) do
+            if activeLanguageDict[code] and activeLanguageDict[code][lookupKey] and not english[lookupKey]
+                and (several or lower:find(code == "de" and GERMAN_LETTERS or FRENCH_LETTERS)) then
+                onlyIn = onlyIn == nil and code or false
+            end
+        end
+        if onlyIn then return onlyIn end
+        local tokens = TranslationEngine.segmentChatIntoTokens(text)
         local score = 0
-        for _, token in ipairs(TranslationEngine.segmentChatIntoTokens(text)) do
+        for _, token in ipairs(tokens) do
             if SPANISH_STRONG_WORDS[token.key] then return "es" end
             if SPANISH_MARKER_WORDS[token.key] then score = score + 1 end
         end
+        local neighbour = latinNeighbourLang(text, tokens)
+        if neighbour then return neighbour end
         if score >= 2 then return "es" end
         return "en"
     end

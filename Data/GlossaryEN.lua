@@ -6800,5 +6800,100 @@ sexy=섹시=sexy
 3 slots left=3명 더 구함=looking for 3 more
 4 slot left=4명 더 구함=looking for 4 more
 4 slots left=4명 더 구함=looking for 4 more
+goblin=고블린=goblin
+murloc=멀록=murloc
+punch card=천공 카드=punch card
+punchcard=천공 카드=punch card
+knockback=넉백=knockback
+knock back=넉백=knockback
+artifact=유물=artifact
+artifacts=유물=artifact
+phial=약병=phial
+quitting=접는 중=quitting
+rescue=구출=rescue
+achivement=업적=achievement
+approaching=다가가는 중=approaching
+barely=간신히=barely
+bleed=출혈=bleed
+blood=피=blood
+bored=심심해=bored
+cats=고양이=cats
+cheers=고마워=cheers
+clean=깔끔=clean
+cleanly=깔끔하게=cleanly
+collection=수집품=collection
+comming=오는 중=coming
+completing=완료하는 중=completing
+coupel=몇 개=couple
+disconect=접속 끊김=disconnect
+dispell=해제=dispel
+easier=더 쉬움=easier
+eaiser=더 쉬움=easier
+endboss=막보=final boss
+enter=입장=enter
+entry=입장=entry
+heyo=안녕=hey
+misions=임무=missions
+french=프랑스어=French
+francais=프랑스어=French
+competent=유능한=competent
+idiots=바보들=idiots
+preferably=되도록=preferably
+realize=깨닫다=realize
+wake=깨우기=wake
+zone=지역=zone
+adjusted=조정됨=adjusted
+af=완전=af
+anvil=모루=anvil
+aswell=또한=as well
+as well=또한=as well
+aww=아이고=aww
+ayy=오=ayy
+bull=황소=bull
+button=버튼=button
+buzzard=대머리수리=buzzard
+candle=양초=candle
+cast=시전=cast
+checking=확인 중=checking
+cchecking=확인 중=checking
+chances=확률=chances
+chanters=마부사=enchanters
+chase=추격=chase
+cmon=어서=c'mon
+completed=완료=completed
+constant=계속=constant
+create=만들기=create
+deception=속임수=deception
+destroyed=파괴됨=destroyed
+disrespect=무례=disrespect
+drown=익사=drown
+dungs=던전들=dungeons
+earlier=아까=earlier
+ego=자존심=ego
+equip=착용=equip
+equiped=착용함=equipped
+escape=탈출=escape
+expect=예상=expect
+explorin=탐험 중=exploring
+further=더=further
+giving=주는 중=giving
+guud=좋아=good
+hahaa=ㅋㅋ=haha
+happened=일어난 일=happened
+hat=모자=hat
+headhunters=머리사냥꾼=headhunters
+heaps=많이=heaps
+hearty=든든한=hearty
+helpin=돕는 중=helping
+helpless=무력한=helpless
+hitbox=히트박스=hitbox
+host=호스트=host
+pasture=목초지=pasture
+hut=오두막=hut
+steath=은신=stealth
+spammin=도배 중=spamming
+omfg=헐=omfg
+scope=조준경=scope
+uninstalled=삭제함=uninstalled
 
 ]=]

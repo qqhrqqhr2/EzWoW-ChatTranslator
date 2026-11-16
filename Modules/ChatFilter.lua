@@ -149,7 +149,7 @@ local OWN_SCRIPT = {
     ru = "[\208\209][\128-\191]",
 }
 
-local TAG_COLOR = { es = "ffbb88", ko = "a0e8a0", zh = "ffcc66", ja = "ff99cc", ru = "99ccff", en = "cccccc" }
+local TAG_COLOR = { es = "ffbb88", de = "e0c070", fr = "b0a0ff", ko = "a0e8a0", zh = "ffcc66", ja = "ff99cc", ru = "99ccff", en = "cccccc" }
 local myGUID, myNames
 
 -- the sender is "name surname" on this client; the GUID is checked first
@@ -277,7 +277,7 @@ function ChatStreamFilter.processIncomingEntry(msg, author, event, guid)
     local sameText = squash(greenVal.plain) == squash(clean)
     if sameText and ns.SAME_SOURCE[targetKey] == lang then return ChatStreamFilter.copyOnly(msg, author) end
     if not savedDB.chat.langs[lang] or ns.SAME_SOURCE[targetKey] == lang then
-        for _, sourceVal in ipairs({"en", "es", "ru", "zh", "ja", "ko"}) do
+        for _, sourceVal in ipairs({"en", "es", "de", "fr", "ru", "zh", "ja", "ko"}) do
             if greenVal.languages[sourceVal] and savedDB.chat.langs[sourceVal] and ns.SAME_SOURCE[targetKey] ~= sourceVal then lang = sourceVal; break end
         end
     end
@@ -395,7 +395,7 @@ function ChatStreamFilter.handleChatMessageEvent(self, event, msg, author, ...)
     local activeCfg = ns.db and ns.db.chat
     local settings = activeCfg and table.concat({tostring(ns.ResolveTargetLanguageCode()), tostring(activeCfg.enabled), tostring(activeCfg.inline),
         tostring(activeCfg.minCover), tostring(activeCfg.tag), tostring(activeCfg.hoverAll), tostring(activeCfg.skipSelf),
-        tostring(activeCfg.langs.ko), tostring(activeCfg.langs.zh), tostring(activeCfg.langs.ja), tostring(activeCfg.langs.ru), tostring(activeCfg.langs.en), tostring(activeCfg.langs.es),
+        tostring(activeCfg.langs.ko), tostring(activeCfg.langs.zh), tostring(activeCfg.langs.ja), tostring(activeCfg.langs.ru), tostring(activeCfg.langs.en), tostring(activeCfg.langs.es), tostring(activeCfg.langs.de), tostring(activeCfg.langs.fr),
         tostring(ns.customVersion or 0), tostring(activeCfg.copyAll),
         tostring((activeCfg.channels or {}).public), tostring((activeCfg.channels or {}).say),
         tostring((activeCfg.channels or {}).guild), tostring((activeCfg.channels or {}).group),

@@ -11,6 +11,7 @@ ns.TARGETS = {"ko", "en", "de", "fr", "es", "ru", "zhCN", "zhTW", "ja"}
 ns.TARGET_NAME.de, ns.TARGET_NAME.fr, ns.TARGET_NAME.ja, ns.TARGET_NAME.es = "Deutsch", "Français", "日本語", "Español"
 ns.SAME_SOURCE.de, ns.SAME_SOURCE.fr, ns.SAME_SOURCE.ja, ns.SAME_SOURCE.es = "de", "fr", "ja", "es"
 ns.DEFAULTS.chat.langs.es = true
+ns.DEFAULTS.chat.langs.de, ns.DEFAULTS.chat.langs.fr = true, true
 local locale = GetLocale()
 if locale == "deDE" then ns.CLIENT_TARGET = "de"
 elseif locale == "frFR" then ns.CLIENT_TARGET = "fr"
