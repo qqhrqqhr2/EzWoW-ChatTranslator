@@ -232,7 +232,7 @@ local FRENCH_STRONG_WORDS = {je=true,pas=true,avec=true,merci=true,cherche=true,
     mais=true,bonjour=true,bonsoir=true,aussi=true,donc=true,quoi=true,besoin=true,soigneur=true,donjon=true,guilde=true,
     dans=true,une=true,["déjà"]=true,["être"]=true,faut=true,["j'ai"]=true,["c'est"]=true,["qu'un"]=true,["quelqu'un"]=true,
     cette=true,beaucoup=true,toujours=true,rien=true,votre=true,notre=true,leur=true,sommes=true,["êtes"]=true,avez=true,avons=true}
-local FRENCH_MARKER_WORDS = {les=true,des=true,qui=true,bon=true,va=true,du=true,
+local FRENCH_MARKER_WORDS = {les=true,des=true,de=true,qui=true,bon=true,va=true,du=true,
     ma=true,il=true,pour=true,tout=true,fait=true,ce=true}
 local GERMAN_LETTERS = "\195[\164\182\188\159\132\150\156]"                 -- ä ö ü ß Ä Ö Ü
 local FRENCH_LETTERS = "\195[\168\170\160\167\185\162\174\180\187\171\175]" -- è ê à ç ù â î ô û ë ï
@@ -251,9 +251,9 @@ local function latinNeighbourLang(text, tokens)
     local lower = text:lower()
     if lower:find(GERMAN_LETTERS) then de = de + 2 end
     if lower:find(FRENCH_LETTERS) then fr = fr + 2 end
-    if de >= 2 and de > fr then return "de" end
-    if fr >= 2 and fr > de then return "fr" end
-    return nil
+    if de >= 2 and de > fr then return "de", de, fr end
+    if fr >= 2 and fr > de then return "fr", de, fr end
+    return nil, de, fr
 end
 
 function TranslationEngine.detectDominantScriptLang(text)
@@ -283,19 +283,30 @@ function TranslationEngine.detectDominantScriptLang(text)
         local english = activeLanguageDict.en or {}
         -- the whole line is a Spanish phrase (and not English)
         if activeLanguageDict.es and activeLanguageDict.es[lookupKey] and not english[lookupKey] then return "es" end
-        -- or a German or French one: two words or more, or with letters only that
-        -- language uses (single English-looking words stay English: regen, gift, route)
+        -- or a German or French one: with letters only that language uses, or two
+        -- words or more of which one is not English or one is a word of that language
+        -- (single English-looking words stay English: regen, gift, route; and so do
+        -- lines of English game words only: "run brd", "ninja loot", "pull aoe")
         local lower = text:lower()
+        local tokens = TranslationEngine.segmentChatIntoTokens(text)
+        local _, deScore, frScore = latinNeighbourLang(text, tokens)
+        local notEnglish = false
+        for _, token in ipairs(tokens) do
+            if token.kind == "word" and token.key ~= "" and not english[token.key] then
+                notEnglish = true
+                break
+            end
+        end
         local several = lookupKey:find("%s") ~= nil
         local onlyIn
         for _, code in ipairs({ "de", "fr" }) do
             if activeLanguageDict[code] and activeLanguageDict[code][lookupKey] and not english[lookupKey]
-                and (several or lower:find(code == "de" and GERMAN_LETTERS or FRENCH_LETTERS)) then
+                and (lower:find(code == "de" and GERMAN_LETTERS or FRENCH_LETTERS)
+                    or (several and (notEnglish or (code == "de" and deScore or frScore) >= 1))) then
                 onlyIn = onlyIn == nil and code or false
             end
         end
         if onlyIn then return onlyIn end
-        local tokens = TranslationEngine.segmentChatIntoTokens(text)
         local score = 0
         for _, token in ipairs(tokens) do
             if SPANISH_STRONG_WORDS[token.key] then return "es" end
