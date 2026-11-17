@@ -388,6 +388,16 @@ end
 ns.SynchronizeTargetLanguage()
 
 -- Additional translations for interface messages.
+-- converted text with the gamepad UI on (not put in the chat box)
+ns.STR.ko.outPad = "게임패드 화면에서는 채팅 입력창에 넣지 않습니다. 바꾼 문장: %s"
+ns.STR.en.outPad = "With the gamepad UI on, the text is not put in the chat box. Converted: %s"
+ns.STR.zhCN.outPad = "手柄界面下不会放入聊天输入框。转换结果：%s"
+ns.STR.zhTW.outPad = "手把介面下不會放入聊天輸入框。轉換結果：%s"
+if ns.STR.ja then ns.STR.ja.outPad = "ゲームパッドUIではチャット入力欄に入れません。変換結果：%s" end
+ns.STR.ru.outPad = "В интерфейсе геймпада текст не вставляется в поле чата. Результат: %s"
+ns.STR.es.outPad = "Con la interfaz de mando el texto no se pone en el cuadro de chat. Convertido: %s"
+ns.STR.de.outPad = "Mit der Gamepad-Oberfläche wird der Text nicht ins Chatfeld gesetzt. Umgewandelt: %s"
+ns.STR.fr.outPad = "Avec l'interface manette, le texte n'est pas mis dans la zone de discussion. Converti : %s"
 ns.STR.de["resetIconPos"] = "Symbol- und Fensterposition zurücksetzen"
 ns.STR.fr["resetIconPos"] = "Réinitialiser la position de l'icône et de la fenêtre"
 ns.STR.es["resetIconPos"] = "Restablecer posición del icono y la ventana"

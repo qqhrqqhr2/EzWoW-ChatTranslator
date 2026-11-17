@@ -191,6 +191,14 @@ function OutgoingChatComposer.translateOutgoingChatHook(target, text)
     if not text or OutgoingChatComposer.trim(text) == "" then OutgoingChatComposer.printAddonChatMessage(L.outUsage) return end
     local outputList, cover, unknown = ns.TranslateOutgoing(text, target)
     if not outputList then OutgoingChatComposer.printAddonChatMessage(L.outNone) return end
+    -- with the gamepad UI on, the chat box opened from addon code breaks the game's
+    -- gamepad navigation until the interface is reloaded (Libs/EzWoWGamePad): the
+    -- converted text is only shown
+    if ns.GamePad and ns.GamePad.IsActive and ns.GamePad.IsActive() then
+        OutgoingChatComposer.printAddonChatMessage(L.outPad:format(outputList))
+        if unknown and #unknown > 0 then OutgoingChatComposer.printAddonChatMessage(L.outLeft:format(table.concat(unknown, ", "))) end
+        return
+    end
     OutgoingChatComposer.printAddonChatMessage(L.outDone:format(ns.TARGET_NAME[target] or target, cover))
     if unknown and #unknown > 0 then OutgoingChatComposer.printAddonChatMessage(L.outLeft:format(table.concat(unknown, ", "))) end
     OutgoingChatComposer.launchChatWith(outputList)
