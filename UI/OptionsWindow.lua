@@ -164,6 +164,8 @@ ns.SetTarget = SettingsDialog.assignTarget
 
 function SettingsDialog.constructMainFrame()
     containerFrame = CreateFrame("Frame", "EzWoWChatTranslatorOptions", UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
+    -- (taller than the screen: shrunk to fit, Libs/EzWoWGamePad)
+    if ns.GamePad and ns.GamePad.KeepOnScreen then ns.GamePad.KeepOnScreen(containerFrame) end
     containerFrame:SetSize(FRAME_W, 640)
     containerFrame:SetPoint("CENTER")
     containerFrame:SetFrameStrata("FULLSCREEN_DIALOG")

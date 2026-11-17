@@ -3,6 +3,14 @@
 -- Modules/TooltipTranslator.lua : GameTooltip Bilingual Line & Title Translator
 --===========================================================================
 local ADDON, ns = ...
+-- every EzWoW line on the game's tooltips can be turned off at once (Game Menu >
+-- Options > AddOns > EzWoW - Data Sharing; Libs/EzWoWShare TooltipLinesOn)
+local function ezTipsOn()
+    local share = _G.EzWoW_Share
+    if type(share) ~= "table" or type(share.TooltipLinesOn) ~= "function" then return true end
+    local ok, on = pcall(share.TooltipLinesOn)
+    return not ok or on ~= false
+end
 
 -- The "EzWoW - ..." name line at the end of tooltip additions is drawn small.
 -- Shared by the EzWoW addons: the first one loaded sets it up.
@@ -536,6 +544,7 @@ end
 local translatedTooltips = setmetatable({}, { __mode = "k" })
 
 function TooltipTranslationHook.processIncomingEntry(tooltip)
+    if not ezTipsOn() then return end
     local savedDB = ns.db
     if not savedDB or not savedDB.tooltip or not savedDB.tooltip.enabled then return end
     local target = ns.ResolveTargetLanguageCode()
