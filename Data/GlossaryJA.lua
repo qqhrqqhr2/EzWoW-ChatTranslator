@@ -212,14 +212,12 @@ ZGバフ=줄구룹 버프=ZG buff
 お昼過ぎ=안녕하세요=good afternoon
 お気軽にロールしてください=주사위 굴려 주세요=please roll
 お泊まり=잘 자=good night
-お電話でのお問い合わせ=초대 부탁=please invite
 お疲れさまでした=수고하셨습니다=good work
 お疲れ様=수고하셨습니다=thanks for your effort
 お疲れ様でした=수고하셨습니다=thanks for playing
 お疲れ様です=수고하셨습니다=good work
 お見事です=잘하셨습니다=well played
 お金=골드/돈=money
-お問い合わせ=대답=answer
 お食事はお早めに=음식 부탁=food please
 かもしれない/夜を祝福=힘의 축복/아마=blessing of might/might
 かもしれない/強さ=힘=might/strength
@@ -1367,7 +1365,6 @@ ZGバフ=줄구룹 버프=ZG buff
 メンバー募集=멤버 모집=recruiting members
 メンバー募集中=파티원 구함=looking for more
 メール=우편 보내줘=mail me
-メールでのお問い合わせ=우편으로=by mail
 メールボックス=우체통=mailbox
 メール送信=우편 보내줘=mail it
 モノづくり=것=thing
@@ -2769,5 +2766,33 @@ ZGバフ=줄구룹 버프=ZG buff
 鷹の相=매의 상=Aspect of the Hawk
 鷹召喚=매 소환=Summon Hawk
 黒の蓮=검은 연꽃=black lotus
-黒人鍛冶屋=대장장이=blacksmith
+鍛冶屋=대장장이=blacksmith
+答え=대답=answer
+聞く=물어보다=ask
+聞いた=물어봤다=asked
+メールで=우편으로=by mail
+する=하다=do
+持ってる=가지다=have
+ヒールお願い=힐 부탁=heal please
+手伝うよ=도와드릴게요=i'll help
+私がもらう=데려갈게=i'll take
+招待お願い=초대 부탁=invite please
+教えて=알려줘=let me know
+やろう=~하자=let's
+私=나=me
+オッケー=좋아=okay
+オン=~에=on
+ください=주세요=please give
+助けてください=도와주세요=please help
+招待お願いします=초대 부탁=please invite
+プルお願い=풀링해 주세요=please pull
+教えてください=알려주세요=please tell me
+質問=질문=question
+蘇生お願い=부활 부탁=rez please
+連れてって=날 데려가 줘=take me
+私たち=우리를=us
+ようこそ=환영=welcome
+あなた=너=you
+いる？=있어요?=you there?
+どういたしまして=천만에요=you're welcome
 ]=]

@@ -6896,4 +6896,47 @@ omfg=헐=omfg
 scope=조준경=scope
 uninstalled=삭제함=uninstalled
 
+auto=자동=auto
+professional=전문가=professional
+shenanigans=장난=shenanigans
+we'll=우리가 할게=we'll
+rooster=수탉=rooster
+attention=주목=attention
+beads=구슬=beads
+bulwark=보루=bulwark
+consider=고려하다=consider
+created=만들었다=created
+cringe=오글거림=cringe
+cured=치료됨=cured
+dice=주사위=dice
+exceptional=뛰어난=exceptional
+extra=추가=extra
+fence=울타리=fence
+hide=숨기다=hide
+lesser=하급=lesser
+mechanism=장치=mechanism
+mention=언급=mention
+midcore=미드코어=midcore
+nation=국가=nation
+ogre=오우거=ogre
+opposite=반대=opposite
+optional=선택 사항=optional
+reckoning=심판=reckoning
+rugged=질긴=rugged
+sellers=판매자=sellers
+sense=말이 됨=sense
+humor=유머=humor
+humour=유머=humor
+nuking=폭딜=nuking
+nukin=폭딜=nuking
+roleplay=역할극=roleplay
+rp=역할극=roleplay
+levelling=레벨업=leveling
+leaders=리더=leader
+nights=밤=night
+havin=가지고 있는=having
+resets=초기화=reset
+hpriest=신성 사제=holy priest
+ahahahah=하하하=hahaha
+midnight=자정=midnight
 ]=]
