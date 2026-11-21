@@ -233,7 +233,12 @@ function UnitHoverInspector.resolveTip(owner)
         tipWidget = CreateFrame("GameTooltip", "EzWoWChatTranslatorPlayerTooltip", UIParent, "GameTooltipTemplate")
     end
     
-    if tipWidget:GetOwner() ~= owner then
+    -- with EzWoW - Tooltip set to follow the mouse, use its direction like every other EzWoW tooltip
+    local tooltipAddon = _G.EzWoW_Tooltip
+    if type(tooltipAddon) == "table" and type(tooltipAddon.FollowCursor) == "function"
+        and tooltipAddon.FollowCursor(tipWidget, owner) then
+        -- owned and kept at the mouse by EzWoW - Tooltip
+    elseif tipWidget:GetOwner() ~= owner then
         tipWidget:SetOwner(owner, "ANCHOR_CURSOR")
     end
     tipWidget:ClearLines()
