@@ -1,7 +1,7 @@
-# v2.0.27
+# v2.0.28
 
 ### 한국어
-- 플레이어 툴팁이 EzWoW - Tooltip의 "마우스 따라가기" 위치 설정을 따릅니다.
+- 게임의 채팅 채널 창을 열 때 "조금 천천히" 경고가 뜨던 문제를 수정했습니다.
 
 ### English
-- The player tooltip follows EzWoW - Tooltip's "Follow Cursor" setting.
+- Fixed a "slow down" warning when opening the game's chat channel window.
