@@ -1,7 +1,7 @@
-# v2.0.28
+# v2.0.29
 
 ### 한국어
-- 게임의 채팅 채널 창을 열 때 "조금 천천히" 경고가 뜨던 문제를 수정했습니다.
+- "번역하지 못한 표현" 안내를 접속 직후가 아니라 조금 뒤에 보여 줍니다.
 
 ### English
-- Fixed a "slow down" warning when opening the game's chat channel window.
+- The "untranslated expressions" notice now waits a little after logging in.
