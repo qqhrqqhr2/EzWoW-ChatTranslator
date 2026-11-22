@@ -240,6 +240,8 @@ ns.OnLogin = function()
         ns.db.latinCleanV1 = true
     end
     if C_Timer and C_Timer.After then
-        C_Timer.After(15, function() pcall(UnknownTermLogger.noticeIfPending) end)
+        -- after the login chat has settled: no EzWoW chat line in the first 20 s after login or /reload
+        -- (2026-11-22: at 15 s the dev check flagged it)
+        C_Timer.After(25, function() pcall(UnknownTermLogger.noticeIfPending) end)
     end
 end
