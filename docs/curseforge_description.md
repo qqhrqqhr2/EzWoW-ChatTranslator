@@ -9,7 +9,7 @@ CurseForge summary (KO): 외국어 채팅에 언어 태그와 대략적인 뜻�
 
 A real-time dictionary translator for WoW Forever. Foreign chat gets a language tag and a rough meaning, built from a dictionary of 23,116 WoW terms, slang and abbreviations inside the addon (no online translation). It also translates untranslated item and spell tooltips, converts your own messages into another language and shows character info on chat names.
 
-![Settings window](https://raw.githubusercontent.com/qqhrqqhr2/EzWoW-ChatTranslator/master/docs/images/ui_en.png)
+![Settings window](https://raw.githubusercontent.com/ezwow-addons/EzWoW-ChatTranslator/master/docs/images/ui_en.png)
 
 *In-game screenshots with the addon set to English. The game client is Korean, so game text such as zone, item and spell names stays Korean. Character and player names and chat text are blurred.*
 
@@ -62,7 +62,7 @@ Result languages: 한국어, English, Deutsch, Français, Español, Русски
 
 WoW Forever용 실시간 사전 번역 애드온입니다. 외국어 채팅에 언어 태그와 대략적인 뜻을 붙여 주며, 애드온에 들어 있는 23,116개 와우 용어·은어·약어 사전으로 풀어 줍니다(인터넷 번역을 쓰지 않음). 번역이 없는 아이템·주문 툴팁 번역, 내 메시지를 외국어로 바꿔 보내기, 채팅 이름의 캐릭터 정보 툴팁도 있습니다.
 
-![설정창](https://raw.githubusercontent.com/qqhrqqhr2/EzWoW-ChatTranslator/master/docs/images/ui_ko.png)
+![설정창](https://raw.githubusercontent.com/ezwow-addons/EzWoW-ChatTranslator/master/docs/images/ui_ko.png)
 
 *실제 게임 화면입니다(WoW Forever, 한국어 클라이언트). 캐릭터 · 다른 플레이어 이름과 채팅 내용은 가렸습니다.*
 

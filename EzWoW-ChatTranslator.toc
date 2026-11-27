@@ -21,12 +21,12 @@
 ## Notes-zhCN: 将韩语/中文/日语/俄语/英语/西班牙语/德语/法语聊天翻译成本地语言（内置游戏俚语和魔兽术语词典）。
 ## Notes-zhTW: 將韓語/中文/日語/俄語/英語/西班牙語/德語/法語聊天翻譯成本地語言（內建遊戲俚語和魔獸術語詞典）。
 ## Notes-jaJP: 韓国語・英語・中国語・日本語・ロシア語・スペイン語・ドイツ語・フランス語のチャットを内蔵のゲーム用語辞書で翻訳します。
-## Author: qqhrqqhr2
+## Author: ezwow-addons
 ## Version: 2.0.29
 ## Category: EzWoW
 ## IconTexture: Interface\AddOns\EzWoW-ChatTranslator\Media\icon
 ## X-License: GPL-3.0
-## X-Website: https://github.com/qqhrqqhr2/EzWoW-ChatTranslator
+## X-Website: https://github.com/ezwow-addons/EzWoW-ChatTranslator
 ## X-Curse-Project-ID: 1733319
 ## SavedVariables: EzWoW_ChatTranslatorDB, EzWoW_SharedData, EzWoW_ShareStore_ChatTranslator
 
