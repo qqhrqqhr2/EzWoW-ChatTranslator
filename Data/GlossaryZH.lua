@@ -77,6 +77,7 @@ roll点=주사위 굴리기=roll
 Shifting Power=변신의 힘=Shifting Power
 sm=주술사=Shaman
 ss=흑마법사=Warlock
+來1補=힐러 1명 구함=need 1 healer
 斯坦索姆后门=스트라솔름 후문=Stratholme undead side
 stsm=스트라솔름=Stratholme
 t=탱커=tank
@@ -121,6 +122,7 @@ zul=줄파락=Zul'Farrak
 您的材料=재료는 구매자가 준비=your materials
 我可以加入嗎?=참가해도 되나요?=can I join?
 我错了=제 실수입니다=my mistake
+来1补=힐러 1명 구함=need 1 healer
 無收費=수수료 없음=no fee
 是必须的=필수입니다=is a must
 有地方嗎?=자리 있나요?=is there a spot?
@@ -128,6 +130,10 @@ zul=줄파락=Zul'Farrak
 有空位嗎?=자리 있나요?=any spots available?
 每塊=개당=per piece
 理事會=협의회=council
+缺补=힐러 구함=need a healer
+缺補=힐러 구함=need a healer
+补=힐러=healer
+補=힐러=healer
 谁都行=누구든=anybody
 谢谢你的努力=수고하셨습니다=thanks for your effort
 谢谢大家=모두 고마워요=thanks everyone

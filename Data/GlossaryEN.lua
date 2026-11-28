@@ -6939,4 +6939,16 @@ resets=초기화=reset
 hpriest=신성 사제=holy priest
 ahahahah=하하하=hahaha
 midnight=자정=midnight
+landed=도착했다=landed
+willing=기꺼이 하는=willing
+confirmed=확인됨=confirmed
+endgame=만렙 콘텐츠=endgame
+potentially=어쩌면=potentially
+shared=공유된=shared
+slower=더 느린=slower
+sundays=일요일마다=on Sundays
+compound=주둔지=compound
+moon=달=moon
+glade=숲속 빈터=glade
+moon glade=달의 숲=Moonglade
 ]=]
