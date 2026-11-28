@@ -1,9 +1,9 @@
-# v2.0.30
+# v2.0.31
 
 ### 한국어
-- 다른 사용자가 공유한 상점 물건·트레이너 기술·퀘스트를 주고받는 NPC·퀘스트 보상·오브젝트 이름을 한 사람만 보내도 바로 씁니다.
-- 두 사람의 확인이 필요한 드롭 기록은 더 오래 기다립니다.
+- 중국어 채팅의 "補/补"(힐러)를 번역합니다 (예: "來1補" → 힐러 1명 구함).
+- 영어 채팅에서 자주 쓰는 단어 12개(confirmed, landed, endgame, moon glade 등)를 번역합니다.
 
 ### English
-- Shared shop goods, trainer spells, quest givers and turn-ins, quest rewards and object names are now used as soon as one player sends them.
-- Shared drops, which still need a second player, now wait longer for one.
+- Chinese chat: "補/补" (healer) is now translated (e.g. "來1補" → need 1 healer).
+- English chat: 12 more everyday words are translated (confirmed, landed, endgame, moon glade and more).
